@@ -10,6 +10,7 @@ public class CyclesGoldenFibo {
         } while (i <= number);
         return false;
     }
+
     public static int fiboNumber(int n) {
         int a = 0;
         int b = 1;
