@@ -2,23 +2,14 @@ package ru.progwards.java1.lessons.compare_if_cycles;
 
 public class TriangleInfo {
     public static boolean isTriangle(int a, int b, int c) {
-        if (a < b+c && b < a+c && c < a+b)
-            return true;
-        else
-            return  false;
+        return a < b + c && b < a + c && c < a + b;
     }
     public static boolean isRightTriangle(int a, int b, int c) {
-        if (a*a == b*b + c*c || b*b == a*a + c*c || c*c == a*a + b*b)
-            return true;
-        else
-            return  false;
-
+        return a*a == b*b + c*c || b*b == a*a + c*c || c*c == a*a + b*b;
     }
+
     public static boolean isIsoscelesTriangle(int a, int b, int c) {
-        if (a == b || b == c || a == c)
-            return true;
-        else
-            return false;
+        return a == b || b == c || a == c;
     }
 
     public static void main(String[] args) {
