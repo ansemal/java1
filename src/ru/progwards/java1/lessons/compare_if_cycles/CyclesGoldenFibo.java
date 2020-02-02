@@ -2,12 +2,12 @@ package ru.progwards.java1.lessons.compare_if_cycles;
 
 public class CyclesGoldenFibo {
     public static boolean containsDigit(int number, int digit) {
-        int i = 0;
+        int a = 0;
         do {
-            if (i == digit)
+            if (number == digit || a == digit)
                 return true;
-            i++;
-        } while (i <= number);
+            a = number % 10;
+            number /= 10;} while (number >= digit);
         return false;
     }
 
@@ -41,6 +41,7 @@ public class CyclesGoldenFibo {
     }
 
     public static void main(String[] args) {
+        System.out.println(containsDigit(25063,0));
         for (int i=1; i<=15; i++)
             if (i < 15)
                 System.out.print(fiboNumber(i) + ", ");
