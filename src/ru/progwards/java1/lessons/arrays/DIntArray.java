@@ -10,7 +10,7 @@ public class DIntArray {
 
     public void add(int num) {
         int [] mas1 = Arrays.copyOf(mas,mas.length+1);
-        mas1 [mas.length] = num;
+        mas1 [mas.length-1] = num;
         mas = Arrays.copyOf(mas1,mas1.length);
         //  System.out.println(Arrays.toString(mas));
     }
@@ -30,9 +30,9 @@ public class DIntArray {
     public void atDelete(int pos) {
         int [] mas3 = new int [mas.length-1];
         for (int i=0; i<mas.length; i++) {
-            if (i < pos-1)
+            if (i < pos)
                 mas3[i] = mas[i];
-            else if (i > pos-1)
+            else if (i > pos)
                 mas3 [i -1] = mas[i];
             else continue;
         }
