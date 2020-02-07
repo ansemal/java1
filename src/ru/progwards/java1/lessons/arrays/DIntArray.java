@@ -12,7 +12,7 @@ public class DIntArray {
         int [] mas1 = Arrays.copyOf(mas,mas.length+1);
         mas1 [mas.length] = num;
         mas = Arrays.copyOf(mas1,mas1.length);
-        //  System.out.println(Arrays.toString(mas));
+          //System.out.println(Arrays.toString(mas));
     }
 
     public void atInsert(int pos, int num) {
@@ -24,25 +24,29 @@ public class DIntArray {
         }
         mas2 [pos-1] = num;
         mas = Arrays.copyOf(mas2,mas2.length);
-          System.out.println(Arrays.toString(mas));
+          //System.out.println(Arrays.toString(mas));
     }
 
     public void atDelete(int pos) {
-        int [] mas3 = new int [mas.length-1];
-        for (int i=0; i<mas.length-1; i++) {
-            if (i < pos)
-                mas3[i] = mas[i];
-            else if (i > pos)
-                mas3 [i -1] = mas[i];
-            else continue;
+        if (mas.length > 0) {
+            int[] mas3 = new int[mas.length - 1];
+            for (int i = 0; i < mas.length - 1; i++) {
+                if (i < pos) {
+                    mas3[i] = mas[i];}
+                else if (i > pos)
+                    mas3[i - 1] = mas[i];
+                else continue;
+            }
+            mas = Arrays.copyOf(mas3, mas3.length);
+                //System.out.println(Arrays.toString(mas));
         }
-        mas = Arrays.copyOf(mas3,mas3.length);
-     //     System.out.println(Arrays.toString(mas));
     }
 
     public int at(int pos) {
-     //     System.out.println(Integer.toString(mas[pos-1]));
+          //System.out.println(Integer.toString(mas[pos-1]));
+          if (pos > 1 && pos <= mas.length-1)
         return mas[pos-1];
+          else return 0;
     }
 
     public static void main(String[] args) {
@@ -51,8 +55,11 @@ public class DIntArray {
         b.add(8);
         b.add(-48);
         b.add(0);
+        for (int i=0; i<20; i++)
+            b.add(i);
         b.atInsert(2,555);
-        b.atDelete(5);
+        for (int i=0;i<30;i++)
+        b.atDelete(i);
         b.at(3);
     }
 }
