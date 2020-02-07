@@ -3,7 +3,7 @@ package ru.progwards.java1.lessons.arrays;
 import java.util.Arrays;
 
 public class DIntArray {
-    private int [] mas = {5,8,6,7,1,2,8,9,15};
+    private int [] mas;
 
     DIntArray() {
     }
