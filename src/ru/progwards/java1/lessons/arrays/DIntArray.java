@@ -3,7 +3,7 @@ package ru.progwards.java1.lessons.arrays;
 import java.util.Arrays;
 
 public class DIntArray {
-    private int [] mas;
+    private int [] mas = new int [0];
 
     DIntArray() {
     }
@@ -11,7 +11,8 @@ public class DIntArray {
     public void add(int num) {
         int [] mas1 = Arrays.copyOf(mas,mas.length+1);
         mas1 [mas.length] = num;
-        System.out.println(Arrays.toString(mas1));
+        mas = Arrays.copyOf(mas1,mas1.length);
+        //  System.out.println(Arrays.toString(mas));
     }
 
     public void atInsert(int pos, int num) {
@@ -22,7 +23,8 @@ public class DIntArray {
             else mas2 [i + 1] = mas[i];
         }
         mas2 [pos-1] = num;
-        System.out.println(Arrays.toString(mas2));
+        mas = Arrays.copyOf(mas2,mas2.length);
+        //  System.out.println(Arrays.toString(mas));
     }
 
     public void atDelete(int pos) {
@@ -34,17 +36,21 @@ public class DIntArray {
                 mas3 [i -1] = mas[i];
             else continue;
         }
-        System.out.println(Arrays.toString(mas3));
+        mas = Arrays.copyOf(mas3,mas3.length);
+        //  System.out.println(Arrays.toString(mas));
     }
 
     public int at(int pos) {
-        System.out.println(Integer.toString(mas[pos-1]));
+        //  System.out.println(Integer.toString(mas[pos-1]));
         return mas[pos-1];
     }
 
     public static void main(String[] args) {
         DIntArray b = new DIntArray();
         b.add(4);
+        b.add(8);
+        b.add(-48);
+        b.add(0);
         b.atInsert(2,555);
         b.atDelete(5);
         b.at(3);
