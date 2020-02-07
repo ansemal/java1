@@ -10,7 +10,7 @@ public class DIntArray {
 
     public void add(int num) {
         int [] mas1 = Arrays.copyOf(mas,mas.length+1);
-        mas1 [mas.length-1] = num;
+        mas1 [mas.length] = num;
         mas = Arrays.copyOf(mas1,mas1.length);
         //  System.out.println(Arrays.toString(mas));
     }
@@ -24,12 +24,12 @@ public class DIntArray {
         }
         mas2 [pos-1] = num;
         mas = Arrays.copyOf(mas2,mas2.length);
-        //  System.out.println(Arrays.toString(mas));
+          System.out.println(Arrays.toString(mas));
     }
 
     public void atDelete(int pos) {
         int [] mas3 = new int [mas.length-1];
-        for (int i=0; i<mas.length; i++) {
+        for (int i=0; i<mas.length-1; i++) {
             if (i < pos)
                 mas3[i] = mas[i];
             else if (i > pos)
@@ -37,11 +37,11 @@ public class DIntArray {
             else continue;
         }
         mas = Arrays.copyOf(mas3,mas3.length);
-        //  System.out.println(Arrays.toString(mas));
+     //     System.out.println(Arrays.toString(mas));
     }
 
     public int at(int pos) {
-        //  System.out.println(Integer.toString(mas[pos-1]));
+     //     System.out.println(Integer.toString(mas[pos-1]));
         return mas[pos-1];
     }
 
