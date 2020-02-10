@@ -10,9 +10,9 @@ public class CalculateFibonacci {
 
     public static int fiboNumber(int n) {
        CacheInfo tempFibo = new CacheInfo();
-        tempFibo = getLastFibo();
-       if (tempFibo.n == n)
-           return tempFibo.fibo;
+//        tempFibo = getLastFibo();
+//       if (tempFibo.n == n)
+//           return tempFibo.fibo;
         int a = 0;
         int b = 1;
         int c = 0;
@@ -32,6 +32,8 @@ public class CalculateFibonacci {
         tempFibo.n = n;
         tempFibo.fibo = c;
         lastFibo = tempFibo;
+//        lastFibo.n = tempFibo.n;
+//        lastFibo.fibo = tempFibo.fibo;
         return  c;
     }
 
