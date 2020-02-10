@@ -2,7 +2,7 @@ package ru.progwards.java1.lessons.interfaces;
 
 import java.util.Objects;
 
-public class Animal implements FoodCompare {
+public class Animal implements FoodCompare, CompareWeight {
     double weight;
 
     enum AnimalKind {
@@ -63,6 +63,16 @@ public class Animal implements FoodCompare {
     }
 
     @Override
+    public CompareResult compareWeight(CompareWeight smthHasWeigt) {
+        Animal smth = (Animal)smthHasWeigt;
+        if (Double.compare(this.getWeight(),smth.getWeight()) > 0)
+            return CompareResult.GREATER;
+        if (Double.compare(this.getWeight(),smth.getWeight()) < 0)
+            return CompareResult.LESS;
+        return CompareResult.EQUAL;
+    }
+
+    @Override
     public int compareFoodPrice(Animal animal) {
         return Double.compare(this.getFoodPrice(), animal.getFoodPrice());
     }
@@ -81,9 +91,9 @@ public class Animal implements FoodCompare {
     }
 
     public static void main(String[] args) {
-        Animal animal1 = new Animal(1000.50);
-        Animal animal2 = new Animal(1000.50);
-        Animal animal3 = new Animal(25.25);
+        //Animal animal1 = new Animal(1000.50);
+        //Animal animal2 = new Animal(1000.50);
+        //Animal animal3 = new Animal(25.25);
         Cow cow1 = new Cow(555);
         Duck duck1 = new Duck(11);
         Hamster hamster1 = new Hamster (11);
