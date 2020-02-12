@@ -91,9 +91,6 @@ public class Animal implements FoodCompare, CompareWeight {
     }
 
     public static void main(String[] args) {
-        //Animal animal1 = new Animal(1000.50);
-        //Animal animal2 = new Animal(1000.50);
-        //Animal animal3 = new Animal(25.25);
         Cow cow1 = new Cow(555);
         Duck duck1 = new Duck(11);
         Hamster hamster1 = new Hamster (11);
