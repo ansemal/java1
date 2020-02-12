@@ -1,6 +1,9 @@
 package ru.progwards.java1.lessons.interfaces;
 
+import ru.progwards.java1.lessons.arrays.ArraySort;
+
 public class Food implements CompareWeight {
+    public static CompareWeight ArraySort;
     private  int weight;
 
     Food (int weight) {
@@ -22,13 +25,13 @@ public class Food implements CompareWeight {
     }
 
     public static void sort(CompareWeight[] a) {
-        CompareWeight rev;
+//        CompareWeight rev;
         for (int i=0; i-1<a.length; i++)
             for (int j=i+1; j<a.length; j++)
                 if (a[i].compareWeight(a[j]) == CompareResult.GREATER) {
-                    rev = a[i];
+                    ArraySort = a[i];
                     a[i] = a[j];
-                    a[j] = rev;
+                    a[j] = ArraySort;
                 }
     }
 
