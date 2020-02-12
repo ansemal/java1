@@ -1,7 +1,5 @@
 package ru.progwards.java1.lessons.interfaces;
 
-import ru.progwards.java1.lessons.arrays.ArraySort;
-
 public class Food implements CompareWeight {
     public static CompareWeight ArraySort;
     private  int weight;
