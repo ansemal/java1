@@ -19,9 +19,9 @@ public class IntRegister extends Register  {
     public String toString() {      //  - вывод в двоичном виде
         String str = "";
         for (int i=0; i<=31; i++) {
-            if ((i-7)% 8 == 0 & i >0 & i < 31)
-                str = "_" + bitArrays[i].toString() + str;
-            else
+ //           if ((i-7)% 8 == 0 & i >0 & i < 31)
+ //               str = "_" + bitArrays[i].toString() + str;
+ //           else
                 str = bitArrays[i].toString() + str;
         }
         return str;
