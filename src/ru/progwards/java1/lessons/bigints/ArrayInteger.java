@@ -19,7 +19,7 @@ public class ArrayInteger {
             digits [i] = cifra.byteValueExact();
             value = value.divide(temp);
             i++;
-        } while (value.intValue() > 0);
+        } while (value.compareTo(temp) >= 0 && i < digits.length);
     }
 
     BigInteger toInt() {
@@ -55,13 +55,13 @@ public class ArrayInteger {
     }
 
     public static void main(String[] args) {
-        ArrayInteger aaa = new ArrayInteger(6);
-        ArrayInteger bbb = new ArrayInteger(6);
-        BigInteger big = new BigInteger("523456");
+        ArrayInteger aaa = new ArrayInteger(8);
+        ArrayInteger bbb = new ArrayInteger(8);
+        BigInteger big = new BigInteger("282429536481");
         aaa.fromInt(big);
-        bbb.fromInt(big);
+ //       aaa.fromInt(big);
         System.out.println(aaa.toInt());
-        System.out.println(aaa.add(bbb));
+ //       System.out.println(aaa.add(bbb));
         System.out.println(aaa.toInt());
     }
 }
