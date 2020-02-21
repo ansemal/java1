@@ -18,10 +18,8 @@ public class ArrayInteger {
             cifra = value.mod(temp);
             digits[i] = cifra.byteValueExact();
             value = value.divide(temp);
-            System.out.print(digits[i]);
-            i++;
+           i++;
         } while (i < digits.length);
-        System.out.println();
     }
 
     BigInteger toInt() {
@@ -36,16 +34,19 @@ public class ArrayInteger {
         byte perenos = 0;
         byte perenosTemp;
         int bolshe = 0;
+        if (this.digits.length < num.digits.length) {
+            Arrays.fill(this.digits, (byte) 0);
+            return false;
+        }
         if (this.digits.length > num.digits.length) {
             bolshe = this.digits.length - num.digits.length;
         }
         for (byte i=0; i<this.digits.length-bolshe; i++) {
             if ((this.digits [i] + num.digits [i] + perenos) > 9) {
-                if (i == this.digits.length-1 || this.digits.length < num.digits.length) {
+                if (i == this.digits.length-1) {
                     Arrays.fill(this.digits, (byte) 0);
                     return false;
                 }
-
                 perenosTemp = (byte) ((this.digits [i] +  num.digits [i] + perenos) / 10);
                 this.digits [i] = (byte) ((this.digits [i] + num.digits [i] + perenos) % 10);
                 perenos = perenosTemp;
