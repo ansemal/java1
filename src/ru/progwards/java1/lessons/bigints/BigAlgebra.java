@@ -26,17 +26,17 @@ public class BigAlgebra {
     }
 
     static BigInteger fibonacci(int n) {
-         int a = 0;
-        int b = 1;
-        int c = 0;
+        BigInteger a = new BigInteger("0");
+        BigInteger b = new BigInteger("1");
+        BigInteger c = new BigInteger("0");
         if (n == 1)
             return BigInteger.ONE;
         for (int i = 2; i <= n; i++) {
-            c = a + b;
+            c = a.add(b);
             a = b;
             b = c;
         }
-        return  BigInteger.valueOf(c);
+        return  c;
 
     }
 
@@ -44,6 +44,6 @@ public class BigAlgebra {
     public static void main(String[] args) {
         BigDecimal aaa = new BigDecimal("2.5");
         System.out.println(fastPow(aaa, 3));
-        System.out.println(fibonacci(8));
+        System.out.println(fibonacci(90));
     }
 }

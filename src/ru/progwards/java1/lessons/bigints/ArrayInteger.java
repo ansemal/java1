@@ -26,8 +26,8 @@ public class ArrayInteger {
 
     BigInteger toInt() {
         String str = "";
-        for (byte digit : digits ) {
-            str = digit + str;
+        for (int i = digits.length-1; i>=0; i--) {
+            str = str + digits[i];
         }
         return new BigInteger (str);
     }
