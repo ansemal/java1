@@ -16,15 +16,17 @@ public class ArrayInteger {
         int i = 0;
         do {
             cifra = value.mod(temp);
-            digits [i] = cifra.byteValueExact();
+            digits[i] = cifra.byteValueExact();
             value = value.divide(temp);
+            System.out.print(digits[i]);
             i++;
-        } while (value.compareTo(temp) >= 0 && i < digits.length);
+        } while (/*value.compareTo(temp) >= 0 && */i < digits.length);
+        System.out.println();
     }
 
     BigInteger toInt() {
         String str = "";
-        for (byte digit : digits) {
+        for (byte digit : digits ) {
             str = digit + str;
         }
         return new BigInteger (str);
@@ -55,9 +57,9 @@ public class ArrayInteger {
     }
 
     public static void main(String[] args) {
-        ArrayInteger aaa = new ArrayInteger(8);
-        ArrayInteger bbb = new ArrayInteger(8);
-        BigInteger big = new BigInteger("282429536481");
+        ArrayInteger aaa = new ArrayInteger(15);
+//        ArrayInteger bbb = new ArrayInteger(8);
+        BigInteger big = new BigInteger("105413504");
         aaa.fromInt(big);
  //       aaa.fromInt(big);
         System.out.println(aaa.toInt());
