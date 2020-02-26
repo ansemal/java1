@@ -12,15 +12,14 @@ public class Coder {
             Scanner scanner = new Scanner(reader);
             // шифрование символов
             try {
+         //       int q =1;
                 String temp;
                 char shifr;
                 while (scanner.hasNextLine()) {
                     String str = "";
                     temp = scanner.nextLine();
                 for (int q = 0; q<temp.length(); q++) {
-                    System.out.println(temp.charAt(q));
-                    System.out.println((int) temp.charAt(q));
-                    shifr = code[(int) temp.charAt(q)];
+                    shifr = code[Character.getNumericValue(temp.charAt(q))];
                     str = str + shifr;
                 }
                 // запись в файл
@@ -32,41 +31,19 @@ public class Coder {
                             writer.close();
                         }
                     } catch (Exception e) {
-                        //logFile(e.getMessage(), logName);
-                        try {
-                            FileWriter log = new FileWriter(logName);
-                            try {
-                                log.write(e.getMessage());
-                            }
-                            finally {
-                                log.close();
-                            }
-                        }  catch (Exception ee) {
-                            System.out.println("Всё пропало " + ee.getMessage());
-                        }
+                        logFile(e.getMessage(), logName);
                     }
                 }
             }finally {
                 scanner.close();
                 reader.close();
             }
-        } catch (Exception e1) {
-  //          logFile(e.getMessage(), logName);
-            try {
-                FileWriter log = new FileWriter(logName);
-                try {
-                    log.write(e1.getMessage());
-                }
-                finally {
-                    log.close();
-                }
-            }  catch (Exception e) {
-                System.out.println("Всё пропало " + e.getMessage());
-            }
+        } catch (Exception e) {
+            logFile(e.getMessage(), logName);
         }
     }
 
-    /*public static void logFile (String exc, String logName) {
+    public static void logFile (String exc, String logName) {
         //запись исключений в логфайл
         try {
             FileWriter log = new FileWriter(logName);
@@ -80,12 +57,12 @@ public class Coder {
             System.out.println("Всё пропало " + e.getMessage());
         }
 
-    }*/
+    }
 
     public static void main(String[] args) {
-        char[] code = new char [2000];
-        int j=1999;
-        for (int i=0; i<2000; i++) {
+        char[] code = new char [100];
+        int j=99;
+        for (int i=0; i<100; i++) {
             code[i] = (char) j;
             j-=i;
         }
