@@ -16,6 +16,7 @@ public class LineCount {
                     }
                 }
             } finally {
+                scanner.close();
                 reader.close();
             }
             return i;
