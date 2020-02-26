@@ -25,6 +25,6 @@ public class LineCount {
     }
 
     public static void main(String[] args) {
-        System.out.println(calcEmpty("???"));
+        System.out.println(calcEmpty("tmp.txt"));
     }
 }
