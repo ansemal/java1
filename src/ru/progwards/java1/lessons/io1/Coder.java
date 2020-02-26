@@ -12,7 +12,6 @@ public class Coder {
             Scanner scanner = new Scanner(reader);
             // шифрование символов
             try {
-         //       int q =1;
                 String temp;
                 char shifr;
                 while (scanner.hasNextLine()) {
