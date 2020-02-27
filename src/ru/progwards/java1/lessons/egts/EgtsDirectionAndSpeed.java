@@ -11,7 +11,7 @@ public class EgtsDirectionAndSpeed {
         int gradus = dirLow & 0b00000000_00000000_00000000_11111111;
         if (dir == 0) {
             return gradus;
-        } else return gradus+255;
+        } else return gradus+256;
     }
 
     public static void main(String[] args) {
