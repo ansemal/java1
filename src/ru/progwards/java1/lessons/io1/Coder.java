@@ -18,14 +18,17 @@ public class Coder {
                     String str = "";
                     temp = scanner.nextLine();
                 for (int q = 0; q<temp.length(); q++) {
-                    shifr = code[Character.getNumericValue(temp.charAt(q))];
+                    shifr = code[(int)temp.charAt(q)];
                     str = str + shifr;
                 }
                 // запись в файл
                     try {
                         FileWriter writer = new FileWriter(outFileName, true);
                         try {
-                            writer.write(str + "\n");
+                            if (scanner.hasNextLine())
+                                writer.write(str + "\n");
+                            else
+                                writer.write(str);
                         } finally {
                             writer.close();
                         }
@@ -33,7 +36,9 @@ public class Coder {
                         logFile(e.getMessage(), logName);
                     }
                 }
-            }finally {
+            } catch (Exception e) {
+               logFile(e.getMessage(), logName);
+            }  finally {
                 scanner.close();
                 reader.close();
             }
