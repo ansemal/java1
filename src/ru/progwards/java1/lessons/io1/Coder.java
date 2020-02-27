@@ -18,8 +18,7 @@ public class Coder {
                     String str = "";
                     temp = scanner.nextLine();
                 for (int q = 0; q<temp.length(); q++) {
-                    shifr = code [Character.getNumericValue(temp.charAt(q))];
-          //          shifr = code[(int)temp.charAt(q)];
+                    shifr = code[(int)temp.charAt(q)];
                     str = str + shifr;
                 }
                 // запись в файл
@@ -27,7 +26,7 @@ public class Coder {
                         FileWriter writer = new FileWriter(outFileName, true);
                         try {
                             if (scanner.hasNextLine())
-                                writer.write(str + /*code[32]); //*/"\n");
+                                writer.write(str + code[(int) '\n']);
                             else
                                 writer.write(str);
                         } finally {
