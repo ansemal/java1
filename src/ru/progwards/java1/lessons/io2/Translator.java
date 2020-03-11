@@ -39,9 +39,9 @@ public class Translator {
                 if (j==inLang.length-1) {
                     if (up == 1) {
                         temp = Character.toUpperCase(arrIn[i].charAt(0)) + arrIn[i].substring(1);
-                        transOut = transOut + temp + znak + " ";
+                        transOut = transOut + temp + znak;
                     } else
-                        transOut = transOut + arrIn[i] + znak + " ";
+                        transOut = transOut + arrIn[i] + znak;
                 }
             }
         }

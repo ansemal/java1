@@ -4,7 +4,7 @@ import java.io.RandomAccessFile;
 
 public class Censor {
 
-    public static class CensorException extends Throwable{
+    public static class CensorException extends Exception{
         String msg;
         String fileName;
 
@@ -19,7 +19,7 @@ public class Censor {
         }
     }
 
-    public static void censorFile(String inoutFileName, String[] obscene) throws Throwable {
+    public static void censorFile(String inoutFileName, String[] obscene) throws Exception{
         try (RandomAccessFile change = new RandomAccessFile(inoutFileName, "rw")) {
             int indX, start, current = 0;
              String temp;
