@@ -54,7 +54,7 @@ public class Censor {
 
     public static void main(String[] args) {
         try {
-            String[] obscene = {"day", "write", "count", "two", "storey"};
+            String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
             censorFile("tmp.txt", obscene);
         }catch (Throwable e) {
             System.out.println(e.toString());
