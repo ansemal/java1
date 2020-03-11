@@ -15,7 +15,7 @@ public class Censor {
 
         @Override
         public String toString () {
-            return fileName + " : " + msg;
+            return fileName + ":" + msg;
         }
     }
 
