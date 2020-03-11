@@ -26,12 +26,10 @@ public class Censor {
              while (change.getFilePointer() < change.length()) {
                  String str = change.readLine();
                 for (String s : obscene) {
-                    if (!str.contains(s))
-                        break;
-                    else {
+                    if (str.contains(s)) {
                         temp = "";
                         start = 0;
-                        while (start < str.length()) {
+                        while (start < str.length()) {              // есть ли еще данные в строке
                             indX = str.indexOf(s, start);           // поиск слова
                             if (indX == -1)
                                 break;
@@ -44,10 +42,10 @@ public class Censor {
                     }
                 }
                 // перезапись слова
-                change.seek(current);
-                change.writeBytes(str);
-                current += (change.getFilePointer()+1);
-                change.seek(current);
+                    change.seek(current);
+                    change.writeBytes(str);
+                    current += (change.getFilePointer() + 1);
+                    change.seek(current);
             }
         } catch (Exception e) {
             throw new CensorException(e.getMessage(),inoutFileName);
@@ -56,7 +54,7 @@ public class Censor {
 
     public static void main(String[] args) {
         try {
-            String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
+            String[] obscene = {"day", "write", "count", "two", "storey"};
             censorFile("tmp.txt", obscene);
         }catch (Throwable e) {
             System.out.println(e.toString());

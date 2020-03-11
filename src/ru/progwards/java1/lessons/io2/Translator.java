@@ -31,17 +31,24 @@ public class Translator {
                 if (arrIn[i].equals(inLang[j])) {
                     if (up == 1) {
                         temp = Character.toUpperCase(outLang[j].charAt(0)) + outLang[j].substring(1);
+                    } else
+                        temp = outLang[j];
+                    if (i != arrIn.length - 1) {
                         transOut = transOut + temp + znak + " ";
-                    } else
-                    transOut = transOut + outLang[j] + znak + " ";
-                   break;
-                }
-                if (j==inLang.length-1) {
-                    if (up == 1) {
-                        temp = Character.toUpperCase(arrIn[i].charAt(0)) + arrIn[i].substring(1);
+                    } else {
                         transOut = transOut + temp + znak;
-                    } else
-                        transOut = transOut + arrIn[i] + znak;
+                    }
+                    break;
+                } else if (j == inLang.length-1) {
+                        if (up == 1) {
+                            temp = Character.toUpperCase(arrIn[i].charAt(0)) + arrIn[i].substring(1);
+                        } else
+                            temp = arrIn[i];
+                        if (i != arrIn.length - 1) {
+                            transOut = transOut + temp + znak + " ";
+                        } else {
+                            transOut = transOut + temp + znak;
+                        }
                 }
             }
         }
@@ -50,8 +57,8 @@ public class Translator {
 
     public static void main(String[] args) {
         String [] inLang = {"hello", "world"};
-        String [] outLang = {"привет", "мир"};
+        String [] outLang = {"привет", "мир",};
         Translator s = new Translator(inLang, outLang);
-        System.out.println(s.translate("Hello? All, world!"));
+        System.out.println(s.translate("Hello! All world!"));
     }
 }
