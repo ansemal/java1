@@ -1,0 +1,65 @@
+package ru.progwards.java1.lessons.io2;
+
+import java.io.RandomAccessFile;
+
+public class Censor {
+
+    public static class CensorException extends Throwable{
+        String msg;
+        String fileName;
+
+        CensorException (String msg, String fileName) {
+            this.msg = msg;
+            this.fileName = fileName;
+        }
+
+        @Override
+        public String toString () {
+            return fileName + " : " + msg;
+        }
+    }
+
+    public static void censorFile(String inoutFileName, String[] obscene) throws Throwable {
+        try (RandomAccessFile change = new RandomAccessFile(inoutFileName, "rw")) {
+            int indX, start, current = 0;
+             String temp;
+             while (change.getFilePointer() < change.length()) {
+                 String str = change.readLine();
+                for (String s : obscene) {
+                    if (!str.contains(s))
+                        break;
+                    else {
+                        temp = "";
+                        start = 0;
+                        while (start < str.length()) {
+                            indX = str.indexOf(s, start);           // поиск слова
+                            if (indX == -1)
+                                break;
+                            for (int q = 0; q < s.length(); q++) {  // заполнение ** шаблона слова
+                                temp += "*";
+                            }
+                            str = str.replaceFirst(s, temp);        // замена слова
+                            start = indX + s.length();
+                        }
+                    }
+                }
+                // перезапись слова
+                change.seek(current);
+                change.writeBytes(str);
+                current += (change.getFilePointer()+1);
+                change.seek(current);
+            }
+        } catch (Exception e) {
+            throw new CensorException(e.getMessage(),inoutFileName);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            String[] obscene = {"Java", "Oracle", "Sun", "Microsystems"};
+            censorFile("tmp.txt", obscene);
+        }catch (Throwable e) {
+            System.out.println(e.toString());
+        }
+    }
+}
