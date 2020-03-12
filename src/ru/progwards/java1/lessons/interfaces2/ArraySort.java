@@ -9,7 +9,7 @@ public class ArraySort {
     }
 
     public static void main(String[] args) {
-        String [] str = {"25","54","15","5","88","0","100","47","12","19"};
+        String [] str = {"26","54","15","5","88","0","100","47","12","19"};
         Number temp = new IntNumber(0);
         Number [] mas = new IntNumber[10];
         for (int i = 0; i<mas.length; i++) {
