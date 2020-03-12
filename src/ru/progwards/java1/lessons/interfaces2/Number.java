@@ -19,6 +19,10 @@ public abstract class Number implements Comparable <Number>{
         return null;
     }
 
+    public int getNum () {
+        return 0;
+    }
+
     public String toString() {
         return null;
     }

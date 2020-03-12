@@ -8,24 +8,26 @@ public class IntNumber extends Number{
     }
 
     @Override
+    public int getNum () {
+        return num;
+    }
+
+    @Override
     public int compareTo (Number num) {
-        String str = num.toString();
-        IntNumber inum = (IntNumber) newNumber(str);
-        return Integer.compare(this.num, inum.num);
+        int inum = num.getNum();
+        return Integer.compare(this.num, inum);
     }
 
     @Override
     public Number mul(Number num) {
-        String str = num.toString();
-        IntNumber inum = (IntNumber) newNumber(str);
-        return new IntNumber(this.num*inum.num);
+        int inum = num.getNum();
+        return new IntNumber(this.num*inum);
     }
 
     @Override
     public Number div(Number num) {
-        String str = num.toString();
-        IntNumber inum = (IntNumber) newNumber(str);
-        return new IntNumber(this.num/inum.num);
+        int inum = num.getNum();
+        return new IntNumber(this.num/inum);
     }
 
     @Override

@@ -1,30 +1,32 @@
 package ru.progwards.java1.lessons.interfaces2;
 
 public class DoubleNumber extends Number {
-    Double num;
+    double num;
 
     public DoubleNumber(Double num) {
         this.num = num;
     }
 
     @Override
+    public int getNum () {
+        return (int) num;
+    }
+
+    @Override
     public int compareTo (Number num) {
-        String str = num.toString();
-        DoubleNumber inum = (DoubleNumber) newNumber(str);
-        return Double.compare(this.num,inum.num);
+        int inum = num.getNum();
+        return Double.compare(this.num,inum);
     }
 
     @Override
     public Number mul(Number num) {
-        String str = num.toString();
-        DoubleNumber inum = (DoubleNumber) newNumber(str);
-        return new DoubleNumber(this.num*inum.num);
+        int inum = num.getNum();
+        return new DoubleNumber(this.num*inum);
     }
 
     public Number div(Number num) {
-        String str = num.toString();
-        DoubleNumber inum = (DoubleNumber) newNumber(str);
-        return new DoubleNumber(this.num/inum.num);
+        int inum = num.getNum();
+        return new DoubleNumber(this.num/inum);
     }
 
     @Override

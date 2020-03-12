@@ -5,7 +5,14 @@ import java.util.Arrays;
 public class ArraySort {
 
     public static void sort(Comparable<Number>[] a) {
-        Arrays.sort(a);
+        Number rev;
+        for (int i=0; i-1<a.length; i++)
+            for (int j=i+1; j<a.length; j++)
+                if (a[i].compareTo((Number) a[j]) > 0) {
+                    rev = (Number) a[i];
+                    a[i] = a[j];
+                    a[j] = rev;
+                }
     }
 
     public static void main(String[] args) {
