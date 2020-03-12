@@ -57,7 +57,7 @@ public class Translator {
 
     public static void main(String[] args) {
         String [] inLang = {"hello", "world"};
-        String [] outLang = {"привет", "мир",};
+        String [] outLang = {"привет", "мир"};
         Translator s = new Translator(inLang, outLang);
         System.out.println(s.translate("Hello! All world!"));
     }
