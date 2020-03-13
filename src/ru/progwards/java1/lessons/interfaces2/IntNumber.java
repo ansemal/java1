@@ -7,27 +7,23 @@ public class IntNumber extends Number{
         this.num = num;
     }
 
-    @Override
-    public int getNum () {
-        return num;
+    public int getNum (Number num) {
+        return ((IntNumber) num).num;
     }
 
     @Override
     public int compareTo (Number num) {
-        int inum = num.getNum();
-        return Integer.compare(this.num, inum);
+        return Integer.compare(this.num, getNum(num));
     }
 
     @Override
     public Number mul(Number num) {
-        int inum = num.getNum();
-        return new IntNumber(this.num*inum);
+        return new IntNumber(this.num*getNum(num));
     }
 
     @Override
     public Number div(Number num) {
-        int inum = num.getNum();
-        return new IntNumber(this.num/inum);
+        return new IntNumber(this.num/getNum(num));
     }
 
     @Override
@@ -37,6 +33,12 @@ public class IntNumber extends Number{
 
     public String toString() {
         return String.valueOf(num);
+    }
 
+    public static void main(String[] args) {
+        IntNumber dd = new IntNumber(10);
+        IntNumber cc = new IntNumber(112);
+        System.out.println(dd.compareTo(cc));
+        System.out.println(dd.mul(cc));
     }
 }

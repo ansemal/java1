@@ -7,26 +7,22 @@ public class DoubleNumber extends Number {
         this.num = num;
     }
 
-    @Override
-    public int getNum () {
-        return (int) num;
-    }
+    public double getNum (Number num) {
+      return ((DoubleNumber) num).num;
+  }
 
     @Override
     public int compareTo (Number num) {
-        int inum = num.getNum();
-        return Double.compare(this.num,inum);
+        return Double.compare(this.num,getNum(num));
     }
 
     @Override
     public Number mul(Number num) {
-        int inum = num.getNum();
-        return new DoubleNumber(this.num*inum);
+        return new DoubleNumber(this.num*getNum(num));
     }
 
     public Number div(Number num) {
-        int inum = num.getNum();
-        return new DoubleNumber(this.num/inum);
+        return new DoubleNumber(this.num/getNum(num));
     }
 
     @Override
@@ -39,8 +35,8 @@ public class DoubleNumber extends Number {
     }
 
     public static void main(String[] args) {
-        DoubleNumber dd = new DoubleNumber(15.0);
-        DoubleNumber cc = new DoubleNumber(15.0);
+        DoubleNumber dd = new DoubleNumber(25.49316366562466);
+        DoubleNumber cc = new DoubleNumber(25.493163665624666);
         System.out.println(dd.compareTo(cc));
     }
 }
