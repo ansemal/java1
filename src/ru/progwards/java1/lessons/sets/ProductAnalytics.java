@@ -10,31 +10,7 @@ public class ProductAnalytics {
         this.products = products;
         this.shops = shops;
     }
-
-    static class Product {      //- убрать статик
-        private String code;
-
-        public Product(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    static class Shop {                          // - убрать статик
-        private List<Product> products;
-
-        public Shop(List<Product> products) {
-            this.products = products;
-        }
-
-        public List<Product> getProducts() {
-            return products;
-        }
-    }
-
+    
     public Set<Product> existInAll() {
         HashSet <Product> exist = new HashSet<>(products);
         for (Shop temp : shops) {

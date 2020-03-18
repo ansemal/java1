@@ -13,8 +13,9 @@ public class LettersInFile {
             while (scanner.hasNextLine()) {
                 str = scanner.nextLine();
                 for (int i=0; i<str.length(); i++) {
-                    System.out.println(str.charAt(i));
-                    treeSet.add(str.charAt(i));
+                    if (Character.isAlphabetic(str.charAt(i))) {
+                        treeSet.add(str.charAt(i));
+                    }
                 }
             }
         }
@@ -27,7 +28,7 @@ public class LettersInFile {
 
     public static void main(String[] args) {
         try {
-            System.out.println(process("out.txt"));
+            System.out.println(process("log.txt"));
         } catch (Exception e) {
             System.out.println("Вот такое исключение " + e.getMessage());
         }
