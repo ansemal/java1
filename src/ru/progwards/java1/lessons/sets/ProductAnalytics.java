@@ -10,7 +10,7 @@ public class ProductAnalytics {
         this.products = products;
         this.shops = shops;
     }
-    
+
     public Set<Product> existInAll() {
         HashSet <Product> exist = new HashSet<>(products);
         for (Shop temp : shops) {
@@ -43,12 +43,13 @@ public class ProductAnalytics {
 
     public Set<Product> existOnlyInOne() {
         HashSet <Product> exist = new HashSet<>();
-        HashSet <Product> existTemp;
+        HashSet <Product> existTemp = new HashSet<>();
         for (Shop temp : shops) {
-            existTemp = exist;
+            existTemp.addAll(exist);
             exist.addAll(temp.getProducts());
             existTemp.retainAll(temp.getProducts());
             exist.removeAll(existTemp);
+            existTemp.clear();
         }
         return exist;
     }
@@ -60,7 +61,7 @@ public class ProductAnalytics {
         List <Product> magnProd = new ArrayList<>();
         List <Product> lentaProd = new ArrayList<>();
         List <Product> products = new ArrayList<>();
-        magnProd.add(krupa);
+        magnProd.add(hleb);
         magnProd.add(voda);
         lentaProd.add(voda);
         lentaProd.add(krupa);
@@ -74,6 +75,6 @@ public class ProductAnalytics {
         shops.add(lenta);
         ProductAnalytics productAnalytics = new ProductAnalytics(products, shops);
         System.out.println(productAnalytics.notExistInShops());
-        System.out.println(productAnalytics);
+        System.out.println(productAnalytics.existOnlyInOne());
     }
 }
