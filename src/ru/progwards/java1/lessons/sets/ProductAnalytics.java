@@ -44,11 +44,14 @@ public class ProductAnalytics {
     public Set<Product> existOnlyInOne() {
         HashSet <Product> exist = new HashSet<>();
         HashSet <Product> existTemp = new HashSet<>();
+        HashSet <Product> existDel = new HashSet<>();
         for (Shop temp : shops) {
             existTemp.addAll(exist);
             exist.addAll(temp.getProducts());
             existTemp.retainAll(temp.getProducts());
+            exist.removeAll(existDel);
             exist.removeAll(existTemp);
+            existDel.addAll(existTemp);
             existTemp.clear();
         }
         return exist;
@@ -62,9 +65,9 @@ public class ProductAnalytics {
         List <Product> lentaProd = new ArrayList<>();
         List <Product> products = new ArrayList<>();
         magnProd.add(hleb);
-        magnProd.add(voda);
+        magnProd.add(krupa);
+        lentaProd.add(hleb);
         lentaProd.add(voda);
-        lentaProd.add(krupa);
         products.add(hleb);
         products.add(krupa);
         products.add(voda);
@@ -74,7 +77,6 @@ public class ProductAnalytics {
         shops.add(magnit);
         shops.add(lenta);
         ProductAnalytics productAnalytics = new ProductAnalytics(products, shops);
-        System.out.println(productAnalytics.notExistInShops());
         System.out.println(productAnalytics.existOnlyInOne());
     }
 }
