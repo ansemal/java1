@@ -4,9 +4,10 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class UsageFrequency {
-    String str;
+    String str = "";
 
     public void processFile(String fileName) {
         try (FileReader reader = new FileReader(fileName); Scanner scanner = new Scanner(reader)) {
@@ -32,7 +33,7 @@ public class UsageFrequency {
 
     public Map<String, Integer> getWords() {
         Map <String, Integer> slovo = new HashMap<>();
-        String [] text = str.split("[\\pP\\s]");
+        String [] text = str.split("[\\pP\\s=<A(.*?)>]");
         for (String s : text) {
             if (s.isEmpty()) continue;
             Integer oldVal = slovo.putIfAbsent(s, 1);
@@ -44,8 +45,8 @@ public class UsageFrequency {
 
     public static void main(String[] args) {
         UsageFrequency usageFrequency = new UsageFrequency();
-        usageFrequency.processFile("tmp.txt");
-//        System.out.println(usageFrequency.getLetters());
+        usageFrequency.processFile("wiki.test.tokens");
+ //       System.out.println(usageFrequency.getLetters());
         System.out.println(usageFrequency.getWords());
 
     }

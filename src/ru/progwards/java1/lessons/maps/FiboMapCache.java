@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class FiboMapCache {
-    private Map<Integer, BigDecimal> fiboCache = new TreeMap<>();
+    private static Map<Integer, BigDecimal> fiboCache = new TreeMap<>();
     boolean cacheOn;
     BigDecimal fibo;
 
     public FiboMapCache(boolean cacheOn) {
         this.cacheOn = cacheOn;
         if (!cacheOn) clearCahe();
+        if (cacheOn && fiboCache == null)
+            fiboCache  = new TreeMap<>();
     }
 
     public BigDecimal fiboNumber(int n) {
@@ -48,7 +50,7 @@ public class FiboMapCache {
     public static void test() {
         FiboMapCache fiboMapCache = new FiboMapCache(true);
         long start = System.currentTimeMillis();
-        for (int i=1; i<=10; i++) {
+        for (int i=1; i<=1000; i++) {
             fiboMapCache.fiboNumber(i);
         }
         long finish = System.currentTimeMillis() - start;
@@ -56,15 +58,24 @@ public class FiboMapCache {
 
         FiboMapCache fiboMapCacheF = new FiboMapCache(false);
         start = System.currentTimeMillis();
-        for (int i=1; i<=10; i++) {
+        for (int i=1; i<=1000; i++) {
             fiboMapCacheF.fiboNumber(i);
         }
         finish = System.currentTimeMillis() - start;
         System.out.println("fiboNumber cacheOn=false время выполнения " + finish);
 
+        fiboMapCache = new FiboMapCache(true);
+        start = System.currentTimeMillis();
+        for (int i=1; i<=1000; i++) {
+            fiboMapCache.fiboNumber(i);
+        }
+        finish = System.currentTimeMillis() - start;
+        System.out.println("fiboNumber cacheOn=true время выполнения " + finish);
+
+        fiboMapCacheF = new FiboMapCache(true);
         start = System.currentTimeMillis();
         for (int i=1; i<=10; i++) {
-            fiboMapCache.fiboNumber(i);
+            fiboMapCacheF.fiboNumber(i);
         }
         finish = System.currentTimeMillis() - start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + finish);
