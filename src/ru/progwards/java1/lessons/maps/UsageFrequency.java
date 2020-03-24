@@ -32,8 +32,8 @@ public class UsageFrequency {
     }
 
     public Map<String, Integer> getWords() {
-        Map <String, Integer> slovo = new HashMap<>();
-        String [] text = str.split("[\\pP\\s=<A(.*?)>]");
+        Map <String, Integer> slovo = new TreeMap<>();
+        String [] text = str.split("[\\pP\\s=<(.*?)>]");
         for (String s : text) {
             if (s.isEmpty()) continue;
             Integer oldVal = slovo.putIfAbsent(s, 1);

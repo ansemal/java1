@@ -11,11 +11,11 @@ public class FiboMapCache {
     public FiboMapCache(boolean cacheOn) {
         this.cacheOn = cacheOn;
         if (!cacheOn) clearCahe();
-        if (cacheOn && fiboCache == null)
-            fiboCache  = new TreeMap<>();
     }
 
     public BigDecimal fiboNumber(int n) {
+        if (cacheOn && fiboCache == null)
+            fiboCache  = new TreeMap<>();
         if (cacheOn && fiboCache.containsKey(n)) {
                 return fiboCache.get(n);
         }
