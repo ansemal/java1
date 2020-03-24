@@ -7,7 +7,8 @@ public class FiboMapCache {
     private static Map<Integer, BigDecimal> fiboCache = new TreeMap<>();
     boolean cacheOn;
     BigDecimal fibo;
-    static LinkedList <Integer>fiboNum = (LinkedList <Integer>) List.of(1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987);
+    static Integer [] fiboNum = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987};
+ //   static LinkedList <Integer>fiboNum = (LinkedList <Integer>) List.of(1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987);
 
     public FiboMapCache(boolean cacheOn) {
         this.cacheOn = cacheOn;
@@ -54,10 +55,9 @@ public class FiboMapCache {
     }
 
     public static void test() {
-        LinkedList <Integer>tempFiboNum = new LinkedList<>(fiboNum);
-        for (int i=0; i<10; i++) {
-            if (!tempFiboNum.isEmpty())
-            fiboCache.put(i, new BigDecimal(tempFiboNum.poll()));
+        for (int i=0; i<fiboNum.length; i++) {
+       //     if (!tempFiboNum.isEmpty())
+            fiboCache.put(i, new BigDecimal(fiboNum[i]));
         }
         FiboMapCache fiboMapCache = new FiboMapCache(true);
         long start = System.currentTimeMillis();
@@ -67,14 +67,14 @@ public class FiboMapCache {
         long finish = System.currentTimeMillis() - start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + finish);
 
-        FiboMapCache fiboMapCacheF = new FiboMapCache(false);
+ /*       FiboMapCache fiboMapCacheF = new FiboMapCache(false);
         start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
             fiboMapCacheF.fiboNumber(i);
         }
         finish = System.currentTimeMillis() - start;
-        System.out.println("fiboNumber cacheOn=false время выполнения " + finish);
-
+        System.out.println("fiboNumber cacheOn=false время выполнения " + finish);*/
+ fiboMapCache.clearCahe();
         fiboMapCache = new FiboMapCache(true);
         start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
@@ -83,13 +83,13 @@ public class FiboMapCache {
         finish = System.currentTimeMillis() - start;
         System.out.println("fiboNumber cacheOn=true время выполнения " + finish);
 
-        fiboMapCacheF = new FiboMapCache(true);
+ /*       fiboMapCacheF = new FiboMapCache(true);
         start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
             fiboMapCacheF.fiboNumber(i);
         }
         finish = System.currentTimeMillis() - start;
-        System.out.println("fiboNumber cacheOn=true время выполнения " + finish);
+        System.out.println("fiboNumber cacheOn=true время выполнения " + finish);*/
     }
 
     public static void main(String[] args) {
