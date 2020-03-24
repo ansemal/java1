@@ -12,6 +12,8 @@ public class SalesInfo {
 
     public int loadOrders(String fileName) {
         String stroka;
+        double parsD;
+        int parsI;
         int strokInput = 0, strokOutput = 0;
         try (FileReader reader = new FileReader(fileName); Scanner scanner = new Scanner(reader)) {
             while (scanner.hasNextLine()) {
@@ -20,10 +22,12 @@ public class SalesInfo {
                 csv  = stroka.split(", ");
                 if (csv.length == 4) {
                     try {
+                        parsI = Integer.parseInt(csv[2]);
+                        parsD = Double.parseDouble(csv[3]);
                         person.push(csv[0]);
                         tovar.push(csv[1]);
-                        shtuk.push(Integer.parseInt(csv[2]));
-                        cena.push(Double.parseDouble(csv[3]));
+                        shtuk.push(parsI);
+                        cena.push(parsD);
                         strokOutput++;
                     } catch (Exception e) {
                         System.out.println("В строке " + strokInput + " проблема с числами.");
@@ -33,6 +37,10 @@ public class SalesInfo {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        System.out.println(person);
+        System.out.println(tovar);
+        System.out.println(shtuk);
+        System.out.println(cena);
         return strokOutput;
     }
 
