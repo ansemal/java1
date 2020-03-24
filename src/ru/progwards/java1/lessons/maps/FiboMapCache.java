@@ -7,10 +7,16 @@ public class FiboMapCache {
     private static Map<Integer, BigDecimal> fiboCache = new TreeMap<>();
     boolean cacheOn;
     BigDecimal fibo;
+    static LinkedList <Integer>fiboNum = (LinkedList <Integer>) List.of(1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987);
 
     public FiboMapCache(boolean cacheOn) {
         this.cacheOn = cacheOn;
         if (!cacheOn) clearCahe();
+     /*   if (cacheOn) {
+            LinkedList <BigDecimal>tempFiboNum = new LinkedList<BigDecimal>(fiboNum);
+            for (int i = 0; i < fiboNum.size(); i++)
+                fiboCache.put(i, tempFiboNum.poll());
+        }*/
     }
 
     public BigDecimal fiboNumber(int n) {
@@ -48,6 +54,11 @@ public class FiboMapCache {
     }
 
     public static void test() {
+        LinkedList <Integer>tempFiboNum = new LinkedList<>(fiboNum);
+        for (int i=0; i<10; i++) {
+            if (!tempFiboNum.isEmpty())
+            fiboCache.put(i, new BigDecimal(tempFiboNum.poll()));
+        }
         FiboMapCache fiboMapCache = new FiboMapCache(true);
         long start = System.currentTimeMillis();
         for (int i=1; i<=1000; i++) {
