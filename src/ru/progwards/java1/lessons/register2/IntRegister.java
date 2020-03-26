@@ -17,7 +17,7 @@ public class IntRegister extends Register  {
     }
 
     public static void main(String[] args) {
-        IntRegister aa = new IntRegister(1560);
+        IntRegister aa = new IntRegister(-757373178);
         System.out.println(aa.toString());
         System.out.println(aa.toDecString());
     }

@@ -17,7 +17,7 @@ public class ByteRegister extends Register{
     }
 
     public static void main(String[] args) {
-        ByteRegister dd = new ByteRegister((byte) 45);
+        ByteRegister dd = new ByteRegister((byte) 12);
         System.out.println(dd);
         System.out.println(dd.toDecString());
     }

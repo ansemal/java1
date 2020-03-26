@@ -8,7 +8,7 @@ public class Register{
 
     public Register(int reg) {
         bitArrays = new Bit[reg];
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < reg; i++)
             bitArrays[i] = bit0;
     }
 
@@ -33,7 +33,8 @@ public class Register{
         String str;
         for (int i = 0; i < bitArrays.length; i++) {
             //если прямой код и 1 или дополнительный код и 0
-            if ((bitArrays[i].value && !bitArrays [7].value) || (!bitArrays[i].value && bitArrays [7].value) )
+            if ((bitArrays[i].value && !bitArrays [bitArrays.length-1].value) ||
+                    (!bitArrays[i].value && bitArrays [bitArrays.length-1].value) )
                 t = 1;
             else t = 0;
             stepen = 2;
@@ -43,7 +44,7 @@ public class Register{
                 temp = stepen * t + temp;
             }
         }
-        if (bitArrays [7].value) {
+        if (bitArrays [bitArrays.length-1].value) {
             temp += 1;
             str = "-" + temp;
         } else str = Integer.toString(temp);

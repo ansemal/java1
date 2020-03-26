@@ -28,7 +28,7 @@ public class Counter {
 
     public static void main(String[] args) {
         ByteRegister aaa = new ByteRegister ((byte) -1);
-        IntRegister bbb = new IntRegister(-1);
+        IntRegister bbb = new IntRegister(1823173841);
         System.out.println(bbb);
         System.out.println(aaa);
         inc(aaa);
