@@ -1,5 +1,6 @@
 package ru.progwards.java1.lessons.register2;
 
+
 public class Register{
     Bit[] bitArrays;
     final Bit bit1 = new Bit(true);
@@ -18,31 +19,36 @@ public class Register{
             return 8;
     }
 
-//    private Register toTwosComplement(Register value) {
+    @Override
+    public String toString() {
+        String str = "";
+        for (Bit bitArray : bitArrays)
+            str = bitArray.toString() + str;
+        return str;
+    }
 
-
-        /*for (int i = 0; i< 7; i++) {
-                if (bitArrays[i].value)
-                    bitArrays[i] = bit0;
-                else
-                    bitArrays[i] = bit1;
-                System.out.print(bitArrays[i].toString());
+    public String toDecString() {//- вывод в десятичной системе счисления
+        int temp = 0;
+        int t, stepen;
+        String str;
+        for (int i = 0; i < bitArrays.length; i++) {
+            //если прямой код и 1 или дополнительный код и 0
+            if ((bitArrays[i].value && !bitArrays [7].value) || (!bitArrays[i].value && bitArrays [7].value) )
+                t = 1;
+            else t = 0;
+            stepen = 2;
+            for (int j=0; j<=i; j++) {
+                if (j==0) stepen = 1;
+                if (j>1) stepen *= 2;
+                temp = stepen * t + temp;
             }
-            System.out.println();
-            for (int i = 0; i< 7; i++) {
-                if (bitArrays [i].value)
-                    bitArrays [i] = bit0;
-                else if (!bitArrays [i].value) {
-                    bitArrays[i] = bit1;
-                    break;
-                }
-                System.out.println(bitArrays[i].toString());
-            }
-            System.out.println();*/
-
-//        return value;
-
-//    }
+        }
+        if (bitArrays [7].value) {
+            temp += 1;
+            str = "-" + temp;
+        } else str = Integer.toString(temp);
+        return str;
+    }
 }
 
 
