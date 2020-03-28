@@ -124,10 +124,9 @@ public class SeaBattleAlg {
         }
     }
 
-
     public void battleAlgorithm(SeaBattle seaBattle) {
-        init(seaBattle);
-        int i = 1;  // изменил
+        /*init(seaBattle);
+        int i = 1;  // изменил с 4
         int j = 0;
         while (hits<20) {
             for (int x = 0; x<10; x++) {
@@ -137,7 +136,7 @@ public class SeaBattleAlg {
                     if (j > i-1)
                         j = 0;
                 }*/
-                for (int y = j; y<10; y+=i){
+ /*               for (int y = j; y<10; y+=i){
                     if (field[x][y] == ' ') {
                         SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
                         fire(x,y);
@@ -154,6 +153,12 @@ public class SeaBattleAlg {
                     i = 2;
                 else if (palub4 == 1)
                     i = 3;*/
+  /*          }
+        }*/
+
+        for (int y = 0; y < seaBattle.getSizeX(); y++) {
+            for (int x = 0; x < seaBattle.getSizeY(); x++) {
+                SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
             }
         }
     }
