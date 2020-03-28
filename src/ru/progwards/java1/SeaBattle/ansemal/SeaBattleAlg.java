@@ -32,7 +32,11 @@ public class SeaBattleAlg {
     //         8|X|.|.|.|.|.|.|X|.|.|
     //         9|X|.|.|.|X|.|.|.|.|.|
 
-    char [][]field;
+    static char [][]field;
+    int hits = 0;
+    int palub4 = 0;
+    int palub3 = 0;
+    int palub2 = 0;
 
     void init (SeaBattle seaBattle) {
         field = new char[seaBattle.getSizeX()][seaBattle.getSizeY()];
@@ -45,35 +49,123 @@ public class SeaBattleAlg {
         field [x][y] = '*';
     }
 
-
-    public void battleAlgorithm(SeaBattle seaBattle) {
-        int hits = 0;
-        init(seaBattle);
-
-        // пример алгоритма:
-        // стрельба по всем квадратам поля полным перебором
-        for (int y = 0; y < seaBattle.getSizeX(); y++) {
-        	for (int x = 0; x < seaBattle.getSizeY(); x++) {
-        		SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
-        		fire(x,y);
-        		if (fireResult != FireResult.MISS)
-        		    hits++;
-        		if (hits >= 20)
-        		    return;
-
-
+    void destroy (int x, int y) {
+        hits++;
+        field [x][y] = 'X';
+        for (int i = -1; i <= 1 ;i++) {
+            for (int j = -1; j<= 1; j++) {
+                if (x+i >= 0 && x+i < 10 && y+j >= 0 && y+j < 10) {
+                    if (field [x+i][y+j] == ' ') {
+                        field [x+i][y+j] = 'o';
+                    }
+                }
             }
         }
     }
 
-    // функция для отладки
+    void hit (int x, int y) {
+        hits++;
+        field [x][y] = 'X';
+        for (int i = -1; i <= 1; i += 2) {
+            for (int j = -1; j <= 1; j += 2) {
+                if (x+i >= 0 && x+i < 10 && y+j >= 0 && y+j < 10 && field[x + i][y + j] == ' ') {
+                    field[x + i][y + j] = 'o';
+                }
+            }
+        }
+    }
+
+    void hitToDestr (SeaBattle seaBattle, int x, int y) {
+        int palub = 2;
+        hit (x, y);
+        int i = x;
+        i++;
+        int j = y;
+        while (j<y+4) {
+            if (i >= 0 && i < 10 && j >= 0 && j < 10 && field[i][j] == ' ') {
+                SeaBattle.FireResult fireResult = seaBattle.fire(i, j);
+                if (fireResult == FireResult.MISS) {
+                    fire(i, j);
+                    if (i > x) i = x-1;
+                    else if (i < x) {
+                        j = y+1;
+                        i = x;
+                    }
+                    else if (j > y) j = y-1;
+                } else if (fireResult == FireResult.DESTROYED) {
+                    destroy(i, j);
+                    if (palub == 2) palub2++;
+                    else if (palub == 3) palub3++;
+                    else palub4++;
+                    break;
+                } else if (fireResult == FireResult.HIT) {
+                    hit(i, j);
+                    palub++;
+                    if (i > x) {
+                        i++;
+                        if (i>9)
+                            i = x-1;
+                    }
+                    else if (i < x-1) i--;
+                    else if (j > y) {
+                        j++;
+                        if (j>9)
+                            j = y-1;
+                    }
+                    else j--;
+                }
+            } else {
+                if (i > x) i = x - 1;
+                else if (i < x) {
+                    j = y + 1;
+                    i = x;
+                } else if (j > y) j = y-1;
+            }
+        }
+    }
+
+
+    public void battleAlgorithm(SeaBattle seaBattle) {
+        init(seaBattle);
+        int i = 4;
+        int j = 0;
+        while (hits<20) {
+            for (int x = 0; x<10; x++) {
+                if (x==0) j = 0;
+                if (x>0) {
+                    j++;
+                    if (j > i-1)
+                        j = 0;
+                }
+                for (int y = j; y<10; y+=i){
+                    if (field[x][y] == ' ') {
+                        SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
+                        fire(x,y);
+                        if (fireResult == FireResult.DESTROYED) {
+                            destroy(x,y);
+                        } else if (fireResult == FireResult.HIT) {
+                            hitToDestr(seaBattle, x, y);
+                        }
+                    }
+                }
+                if (palub4 == 1 && palub3 == 2 && palub2 == 3)
+                    i = 1;
+                else if (palub4 == 1 && palub3 == 2)
+                    i = 2;
+                else if (palub4 == 1)
+                    i = 3;
+            }
+        }
+    }
+
     public static void main(String[] args) {
     	System.out.println("Sea battle");
     	SeaBattle seaBattle = new SeaBattle(true);
     	new SeaBattleAlg().battleAlgorithm(seaBattle);
-
     	System.out.println(seaBattle.getResult());
-        System.out.println(seaBattle);
+    	for (int i =0; i<10; i++) {
+        System.out.println(Arrays.toString(field[i]));
+        }
     }
 }
 
