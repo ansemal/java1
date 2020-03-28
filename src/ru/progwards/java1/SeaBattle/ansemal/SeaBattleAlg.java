@@ -126,7 +126,7 @@ public class SeaBattleAlg {
 
     public void battleAlgorithm(SeaBattle seaBattle) {
         init(seaBattle);
-        int i = 4;  // изменил с 4
+        int i = 4;
         int j = 0;
         while (hits<20) {
             for (int x = 0; x<10; x++) {
@@ -164,7 +164,7 @@ public class SeaBattleAlg {
     public static void main(String[] args) {
     	System.out.println("Sea battle");
     	double res = 0;
-    	for (int i = 0; i<1; i++) {
+    	for (int i = 0; i<1000; i++) {
             SeaBattle seaBattle = new SeaBattle();
             new SeaBattleAlg().battleAlgorithm(seaBattle);
             res += seaBattle.getResult();
