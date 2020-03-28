@@ -160,12 +160,16 @@ public class SeaBattleAlg {
 
     public static void main(String[] args) {
     	System.out.println("Sea battle");
-    	SeaBattle seaBattle = new SeaBattle(true);
-    	new SeaBattleAlg().battleAlgorithm(seaBattle);
-    	System.out.println(seaBattle.getResult());
-    	for (int i =0; i<10; i++) {
-        System.out.println(Arrays.toString(field[i]));
+    	double res = 0;
+    	for (int i = 0; i<1000; i++) {
+            SeaBattle seaBattle = new SeaBattle(false);
+            new SeaBattleAlg().battleAlgorithm(seaBattle);
+            res += seaBattle.getResult();
         }
+    	System.out.println(res/1000);
+  //  	for (int i =0; i<10; i++) {
+  //      System.out.println(Arrays.toString(field[i]));
+  //      }
     }
 }
 
