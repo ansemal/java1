@@ -127,16 +127,16 @@ public class SeaBattleAlg {
 
     public void battleAlgorithm(SeaBattle seaBattle) {
         init(seaBattle);
-        int i = 4;
+        int i = 1;  // изменил
         int j = 0;
         while (hits<20) {
             for (int x = 0; x<10; x++) {
-                if (x==0) j = 0;
+  /*              if (x==0) j = 0;
                 if (x>0) {
                     j++;
                     if (j > i-1)
                         j = 0;
-                }
+                }*/
                 for (int y = j; y<10; y+=i){
                     if (field[x][y] == ' ') {
                         SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
@@ -148,12 +148,12 @@ public class SeaBattleAlg {
                         }
                     }
                 }
-                if (palub4 == 1 && palub3 == 2 && palub2 == 3)
+  /*              if (palub4 == 1 && palub3 == 2 && palub2 == 3)
                     i = 1;
                 else if (palub4 == 1 && palub3 == 2)
                     i = 2;
                 else if (palub4 == 1)
-                    i = 3;
+                    i = 3;*/
             }
         }
     }
