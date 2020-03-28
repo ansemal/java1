@@ -46,17 +46,17 @@ public class SeaBattleAlg {
     }
 
     void fire (int x, int y) {
-        field [x][y] = '*';
+        field [y][x] = '*';
     }
 
     void destroy (int x, int y) {
         hits++;
-        field [x][y] = 'X';
+        field [y][x] = 'X';
         for (int i = -1; i <= 1 ;i++) {
             for (int j = -1; j<= 1; j++) {
                 if (x+i >= 0 && x+i < 10 && y+j >= 0 && y+j < 10) {
-                    if (field [x+i][y+j] == ' ') {
-                        field [x+i][y+j] = 'o';
+                    if (field [y+j][x+i] == ' ') {
+                        field [y+j][x+i] = 'o';
                     }
                 }
             }
@@ -65,11 +65,11 @@ public class SeaBattleAlg {
 
     void hit (int x, int y) {
         hits++;
-        field [x][y] = 'X';
+        field [y][x] = 'X';
         for (int i = -1; i <= 1; i += 2) {
             for (int j = -1; j <= 1; j += 2) {
-                if (x+i >= 0 && x+i < 10 && y+j >= 0 && y+j < 10 && field[x + i][y + j] == ' ') {
-                    field[x + i][y + j] = 'o';
+                if (x+i >= 0 && x+i < 10 && y+j >= 0 && y+j < 10 && field[y + j][x + i] == ' ') {
+                    field[y + j][x + i] = 'o';
                 }
             }
         }
@@ -82,7 +82,7 @@ public class SeaBattleAlg {
         i++;
         int j = y;
         while (j<y+4) {
-            if (i >= 0 && i < 10 && j >= 0 && j < 10 && field[i][j] == ' ') {
+            if (i >= 0 && i < 10 && j >= 0 && j < 10 && field[j][i] == ' ') {
                 SeaBattle.FireResult fireResult = seaBattle.fire(i, j);
                 if (fireResult == FireResult.MISS) {
                     fire(i, j);
@@ -106,13 +106,13 @@ public class SeaBattleAlg {
                         if (i>9)
                             i = x-1;
                     }
-                    else if (i < x-1) i--;
+                    else if (i < x) i--;
                     else if (j > y) {
                         j++;
                         if (j>9)
                             j = y-1;
                     }
-                    else j--;
+                    else if (j < y) j--;
                 }
             } else {
                 if (i > x) i = x - 1;
@@ -125,56 +125,54 @@ public class SeaBattleAlg {
     }
 
     public void battleAlgorithm(SeaBattle seaBattle) {
-        /*init(seaBattle);
-        int i = 1;  // изменил с 4
+        init(seaBattle);
+        int i = 4;  // изменил с 4
         int j = 0;
         while (hits<20) {
             for (int x = 0; x<10; x++) {
-  /*              if (x==0) j = 0;
+                if (x==0) j = 0;
                 if (x>0) {
                     j++;
                     if (j > i-1)
                         j = 0;
-                }*/
- /*               for (int y = j; y<10; y+=i){
-                    if (field[x][y] == ' ') {
+                }
+                for (int y = j; y<10; y+=i){
+                    if (field[y][x] == ' ') {
                         SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
                         fire(x,y);
                         if (fireResult == FireResult.DESTROYED) {
                             destroy(x,y);
+                            if (hits == 20)
+                                return;
                         } else if (fireResult == FireResult.HIT) {
                             hitToDestr(seaBattle, x, y);
+                            if (hits == 20)
+                                return;
                         }
                     }
                 }
-  /*              if (palub4 == 1 && palub3 == 2 && palub2 == 3)
+                if (palub4 == 1 && palub3 == 2 && palub2 == 3)
                     i = 1;
                 else if (palub4 == 1 && palub3 == 2)
                     i = 2;
                 else if (palub4 == 1)
-                    i = 3;*/
-  /*          }
-        }*/
-
-        for (int y = 0; y < seaBattle.getSizeX(); y++) {
-            for (int x = 0; x < seaBattle.getSizeY(); x++) {
-                SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
-            }
+                    i = 3;
+           }
         }
     }
 
     public static void main(String[] args) {
     	System.out.println("Sea battle");
     	double res = 0;
-    	for (int i = 0; i<1000; i++) {
-            SeaBattle seaBattle = new SeaBattle(false);
+    	for (int i = 0; i<1; i++) {
+            SeaBattle seaBattle = new SeaBattle();
             new SeaBattleAlg().battleAlgorithm(seaBattle);
             res += seaBattle.getResult();
         }
     	System.out.println(res/1000);
-  //  	for (int i =0; i<10; i++) {
-  //      System.out.println(Arrays.toString(field[i]));
-  //      }
+ //   	for (int i =0; i<10; i++) {
+ //       System.out.println(Arrays.toString(field[i]));
+ //       }
     }
 }
 
