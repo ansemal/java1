@@ -69,8 +69,6 @@ public class Insurance {
         Insurance insurance2 = new Insurance("2020-03-28T00:34:12.141340+03:00[Europe/Moscow]", FormatStyle.FULL);
         System.out.println(insurance2.toString());
         Insurance insurance = new Insurance("2020-03-30T22:26:12.684741+03:00[Europe/Moscow]", FormatStyle.FULL);
-//        insurance.setDuration(1,1,1);
- //       insurance.setDuration("0000-06-03T10:00:00", FormatStyle.LONG);
  //       insurance2.setDuration(ZonedDateTime.parse("2020-04-01T00:34:12.142489+03:00[Europe/Moscow]"));
         insurance2.setDuration(Duration.ofDays(1));
         System.out.println(insurance2.duration);
