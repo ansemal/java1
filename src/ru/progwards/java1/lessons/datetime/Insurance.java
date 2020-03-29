@@ -52,7 +52,7 @@ public class Insurance {
 
     public boolean checkValid(ZonedDateTime dateTime) {
         if (duration != null) {
-            ZonedDateTime finish = start.plus(duration);
+            ZonedDateTime finish = start.minus(duration);
             return dateTime.isBefore(finish);
         } else return true;
     }
@@ -66,16 +66,16 @@ public class Insurance {
     }
 
     public static void main(String[] args) {
-        Insurance insurance2 = new Insurance(ZonedDateTime.now());
+        Insurance insurance2 = new Insurance("2020-03-28T22:26:12.685816+03:00[Europe/Moscow]", FormatStyle.FULL);
         System.out.println(insurance2.toString());
-        Insurance insurance = new Insurance("2019-12-25T12:13:14.444+03:00", FormatStyle.FULL);
+        Insurance insurance = new Insurance("2020-03-30T22:26:12.684741+03:00[Europe/Moscow]", FormatStyle.FULL);
 //        insurance.setDuration(1,1,1);
  //       insurance.setDuration("0000-06-03T10:00:00", FormatStyle.LONG);
-        insurance.setDuration(ZonedDateTime.parse("2020-02-28T13:23:34.444+03:00"));
+        insurance2.setDuration(ZonedDateTime.parse("2020-03-31T22:26:12.685852+03:00[Europe/Moscow]"));
  //       insurance.setDuration(Duration.ofDays(30));
-        System.out.println(insurance.duration);
-        System.out.println(insurance.checkValid(ZonedDateTime.now()));
-        System.out.println(insurance.toString());
+        System.out.println(insurance2.duration);
+        System.out.println(insurance2.checkValid(ZonedDateTime.now()));
+        System.out.println(insurance2.toString());
 
     }
 }

@@ -5,20 +5,24 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Profiler {
-    private static int timeVloz = 0;   // - сумма времени вложенных блоков секций в разный момент
     private static int timeTemp = 0;   // - время работы вложенной секции
     private static Integer countVlozSec = 0;  // - счетчик работающих вложенных секций
     static boolean vlozInc;                      // вход в новую секцию?
 
     static TreeMap<String, StatisticInfo> profilMapResult = new TreeMap<>();
     static Map<String, LocalDateTime> rabota = new TreeMap<>();
+    static Map <String, Integer> vlozTempTime = new HashMap<>();
 
     public static void enterSection(String name) {
         countVlozSec++;
+
         if (countVlozSec > 1 && !vlozInc) {    // если при открытых секциях после закрытия не всех снова пошёл вход
-            timeVloz = timeTemp;              // сохраняем время работы вложенных секций до этого
+            for (var entry: vlozTempTime.entrySet()) {           // сохраняем время работы вложенных секций до этого
+                entry.setValue(entry.getValue() + timeTemp);
+            }
             timeTemp = 0;
         }
+        vlozTempTime.put(name, 0);
         LocalDateTime start = LocalDateTime.now();
         rabota.put(name, start);
         vlozInc = true;
@@ -29,15 +33,12 @@ public class Profiler {
         countVlozSec--;
         LocalDateTime start = rabota.get(name);
         LocalDateTime finish = LocalDateTime.now();
-        fulltimeS = (int) Duration.between(start, finish).toMillis();//.toMillis();
-        int selftimeS = fulltimeS - timeTemp;
-        if (countVlozSec != 0 && timeVloz != 0) {
-            timeTemp = fulltimeS + timeVloz;
-            timeVloz = 0;
-        }
-        else if (countVlozSec != 0) {
+        fulltimeS = (int) Duration.between(start, finish).toMillis();
+        int selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name);
+        vlozTempTime.remove(name);
+        if (countVlozSec != 0) {
             timeTemp = fulltimeS;
-        }
+        } else timeTemp = 0;
 
         StatisticInfo stillNot = profilMapResult.putIfAbsent(name, new StatisticInfo(name, fulltimeS, selftimeS, 1));
         if (stillNot != null) {
@@ -57,24 +58,9 @@ public class Profiler {
 
     public static void main(String[] args) {
         enterSection("1");
-        for (int i=0; i<3000000; i++) {
-            int j = (int)Math.pow(5,i);
+        for (int i = 0; i < 1; i++) {
+            int j = (int) Math.pow(5, i);
         }
-        enterSection("2");
-        for (int i=0; i<3000000; i++) {
-            int j = (int)Math.pow(2,i);
-        }
-        exitSection("2");
-
-       enterSection("2");
-        for (int i=0; i<3000000; i++) {
-            int j = (int)Math.pow(2,i);
-        }
-        exitSection("2");
-
         exitSection("1");
-
-
-        System.out.println(getStatisticInfo());
     }
 }
