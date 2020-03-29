@@ -13,30 +13,6 @@ public class Profiler {
     static TreeMap<String, StatisticInfo> profilMapResult = new TreeMap<>();
     static Map<String, LocalDateTime> rabota = new TreeMap<>();
 
-    public static class StatisticInfo{
-        public String sectionName; // - имя секции
-        public int fullTime; // - полное время выполнения секции в миллисекундах.
-        public int selfTime; // - чистое время выполнения секции в миллисекундах. Для вложенных секций, из времени выполнения внешней секции нужно вычесть времена выполнения вложенных секций.
-        public int count;
-
-        @Override
-        public String toString() {
-            return "StatisticInfo{" +
-                    "sectionName='" + sectionName + '\'' +
-                    ", fullTime=" + fullTime +
-                    ", selfTime=" + selfTime +
-                    ", count=" + count +
-                    '}';
-        }
-
-        public StatisticInfo (String sectionName, int fullTime, int selfTime, int count) {
-            this.sectionName = sectionName;
-            this.fullTime = fullTime;
-            this.selfTime = selfTime;
-            this.count = count;
-        }
-    }
-
     public static void enterSection(String name) {
         countVlozSec++;
         if (countVlozSec > 1 && !vlozInc) {    // если при открытых секциях после закрытия не всех снова пошёл вход
