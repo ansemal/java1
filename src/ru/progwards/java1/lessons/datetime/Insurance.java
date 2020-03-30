@@ -17,7 +17,7 @@ public class Insurance {
         switch (style) {
             case SHORT:
                 LocalDate ld = LocalDate.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE);
-                this.start = ZonedDateTime.of(ld, LocalTime.MIDNIGHT,ZoneId.systemDefault());
+                this.start = ZonedDateTime.of(ld, LocalTime.now(),ZoneId.systemDefault());
                 break;
             case LONG:
                 LocalDateTime ldt = LocalDateTime.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -43,12 +43,9 @@ public class Insurance {
             case SHORT: duration = Duration.ofMillis(Long.parseLong(strDuration));
                         break;
             case LONG: LocalDateTime ld1 = LocalDateTime.parse(strDuration);
-                System.out.println(start);
                         ZonedDateTime finish = start.plusYears(ld1.getYear()).plusMonths(ld1.getMonthValue()).plusDays(ld1.getDayOfMonth())
                                                .plusHours(ld1.getHour()).plusMinutes(ld1.getMinute());
-                System.out.println(finish);
                         duration = Duration.between(start, finish);
-                System.out.println(duration);
                         break;
             case FULL: duration = Duration.parse(strDuration);
         }
@@ -71,7 +68,7 @@ public class Insurance {
     }
 
     public static void main(String[] args) {
-        Insurance insurance2 = new Insurance(ZonedDateTime.now().minusDays(1).minusMonths(1));
+        Insurance insurance2 = new Insurance("2020-02-29", Insurance.FormatStyle.SHORT);
    //     Insurance insurance2 = new Insurance("2020-02-29T11:32:12.738291+03:00[Europe/Kaliningrad]", FormatStyle.FULL);
      //   System.out.println(insurance2.toString());
  //       Insurance insurance = new Insurance("2020-03-31T01:22:13.145329+03:00[Europe/Moscow]", FormatStyle.FULL);
