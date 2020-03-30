@@ -54,7 +54,7 @@ public class Insurance {
         if (duration != null) {
             ZonedDateTime finish = start.plus(duration);
             return dateTime.isAfter(start) && dateTime.isBefore(finish);
-        } else return true;
+        } else return dateTime.isAfter(start);
     }
 
     @Override
@@ -68,12 +68,13 @@ public class Insurance {
     public static void main(String[] args) {
         Insurance insurance2 = new Insurance("2020-03-28T00:34:12.141340+03:00[Europe/Moscow]", FormatStyle.FULL);
         System.out.println(insurance2.toString());
-        Insurance insurance = new Insurance("2020-03-30T22:26:12.684741+03:00[Europe/Moscow]", FormatStyle.FULL);
+        Insurance insurance = new Insurance("2020-03-31T01:22:13.145329+03:00[Europe/Moscow]", FormatStyle.FULL);
  //       insurance2.setDuration(ZonedDateTime.parse("2020-04-01T00:34:12.142489+03:00[Europe/Moscow]"));
         insurance2.setDuration(Duration.ofDays(1));
         System.out.println(insurance2.duration);
         System.out.println(insurance2.checkValid(ZonedDateTime.now()));
         System.out.println(insurance2.toString());
+        System.out.println(insurance.toString());
 
     }
 }
