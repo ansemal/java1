@@ -2,7 +2,6 @@ package ru.progwards.java1.lessons.datetime;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class Insurance {
     public static enum FormatStyle {SHORT, LONG, FULL};
@@ -17,7 +16,7 @@ public class Insurance {
         switch (style) {
             case SHORT:
                 LocalDate ld = LocalDate.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE);
-                this.start = ZonedDateTime.of(ld, LocalTime.now(),ZoneId.systemDefault());
+                this.start = ZonedDateTime.of(ld, LocalTime.MIDNIGHT,ZoneId.systemDefault());
                 break;
             case LONG:
                 LocalDateTime ldt = LocalDateTime.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -43,8 +42,8 @@ public class Insurance {
             case SHORT: duration = Duration.ofMillis(Long.parseLong(strDuration));
                         break;
             case LONG: LocalDateTime ld1 = LocalDateTime.parse(strDuration);
-                        ZonedDateTime finish = start.plusYears(ld1.getYear()).plusMonths(ld1.getMonthValue()).plusDays(ld1.getDayOfMonth())
-                                               .plusHours(ld1.getHour()).plusMinutes(ld1.getMinute());
+                        ZonedDateTime finish = start.plusMinutes(ld1.getMinute()).plusHours(ld1.getHour()).plusDays(ld1.getDayOfMonth())
+                                .plusMonths(ld1.getMonthValue()).plusYears(ld1.getYear());
                         duration = Duration.between(start, finish);
                         break;
             case FULL: duration = Duration.parse(strDuration);
@@ -53,8 +52,7 @@ public class Insurance {
 
     public boolean checkValid(ZonedDateTime dateTime) {
         if (duration != null) {
-            dateTime = dateTime.truncatedTo(ChronoUnit.SECONDS);
-            ZonedDateTime finish = start.plus(duration).truncatedTo(ChronoUnit.SECONDS);
+            ZonedDateTime finish = start.plus(duration);
             return (dateTime.isAfter(start) || dateTime.equals(start)) && (dateTime.isBefore(finish) || dateTime.equals(finish));
         } else return dateTime.isAfter(start);
     }
