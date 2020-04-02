@@ -44,11 +44,11 @@ public class FindDuplicates {
                     if (Files.readString(Paths.get(allFiles[z][3])).equals(Files.readString(Paths.get(allFiles[q][3])))) {
                             // занесение имени и пути одинаковых файлов в список по файлу
                             if (sovpad > 0) {
-                                identTemp.push(allFiles[q][0] + " " + allFiles[q][3]);
+                                identTemp.push(allFiles[q][3]);
                                 System.out.println(identTemp);
                             } else {
-                                identTemp.push(allFiles[z][0] + " " + allFiles[z][3]);
-                                identTemp.push(allFiles[q][0] + " " + allFiles[q][3]);
+                                identTemp.push(allFiles[z][3]);
+                                identTemp.push(allFiles[q][3]);
                                 sovpad = 1;
                             }
                         }

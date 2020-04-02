@@ -31,8 +31,6 @@ public class OrderProcessor{
             pmShopID = FileSystems.getDefault().getPathMatcher("glob:**/" + shopId + "-??????-????.csv");
 
         Files.walkFileTree(Paths.get(startPath), new SimpleFileVisitor<>() {
-            int parsC;
-            double parsP;
             double sum;
 
             @Override
@@ -48,21 +46,26 @@ public class OrderProcessor{
                                 for (String orderItemString: orderItemStrings) {
                                     csv = orderItemString.split(", ");
                                     try {
-                                        parsC = Integer.parseInt(csv[1]);
-                                        parsP = Double.parseDouble(csv[2]);
-                                        orderItems.add(new OrderItem(csv[0], parsC, parsP));
-                                        sum += parsP;
+                                        OrderItem orderItem = new OrderItem();
+                                        orderItem.price = Double.parseDouble(csv[2]);
+                                        orderItem.count = Integer.parseInt(csv[1]);
+                                        orderItem.googsName = csv[0];
+                                        orderItems.add(orderItem);
+                                        sum += orderItem.price;
                                     } catch (Exception e) {
                                         System.out.println("В одной из строк файла " + path.getFileName() + "проблема с числами");
                                     }
                                 }
                                 // наполнение списка orders
-                                String shopIdTemp = path.getFileName().toString().substring(0,3);
-                                String orderIdTTemp = path.getFileName().toString().substring(4,10);
-                                String customerIdTemp = path.getFileName().toString().substring(11,15);
-                                LocalDateTime dateTime = LocalDateTime.ofInstant(attrs.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+                                Order order = new Order();
+                                order.shopId = path.getFileName().toString().substring(0,3);
+                                order.orderId = path.getFileName().toString().substring(4,10);
+                                order.customerId = path.getFileName().toString().substring(11,15);
+                                order.datetime = LocalDateTime.ofInstant(attrs.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+                                order.sum = sum;
                                 Collections.sort(orderItems);
-                                orders.push(new Order(shopIdTemp, orderIdTTemp, customerIdTemp, dateTime, orderItems, sum));
+                                order.items = orderItems;
+                                orders.push(order);
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                             }
