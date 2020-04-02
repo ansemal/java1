@@ -5,12 +5,7 @@ public class OrderItem implements Comparable <OrderItem>{
     public int count;  // - количество
     public double price;  // - цена за единицу
 
-  //  public OrderItem(String googsName, int count, double price) {
    public OrderItem() {
-        this.googsName = googsName;
-        this.count = count;
-        this.price = price;
-
     }
 
     @Override
