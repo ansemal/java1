@@ -51,7 +51,7 @@ public class OrderProcessor{
                                                 OrderItem orderItem = new OrderItem();
                                                 orderItem.price = Double.parseDouble(csv[2]);
                                                 orderItem.count = Integer.parseInt(csv[1]);
-                                                orderItem.goodsName = csv[0];
+                                                orderItem.googsName = csv[0];
                                                 orderItems.add(orderItem);
                                                 sum += orderItem.price;
                                             } catch (Exception e) {
@@ -122,9 +122,9 @@ public class OrderProcessor{
         TreeMap<String, Double> byGoods = new TreeMap<>();
         for (Order order: orders) {
             for (OrderItem orderItem: order.items) {
-                Double was = byGoods.putIfAbsent(orderItem.goodsName, orderItem.price);
+                Double was = byGoods.putIfAbsent(orderItem.googsName, orderItem.price);
                 if (was != null) {
-                    byGoods.put(orderItem.goodsName, orderItem.price + was);
+                    byGoods.put(orderItem.googsName, orderItem.price + was);
                 }
             }
         }

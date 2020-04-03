@@ -15,16 +15,6 @@ public class Order implements Comparable <Order> {
     }
 
     @Override
-    public String toString() {
-        return "\n shopId='" + shopId + '\'' +
-                ", orderId='" + orderId + '\'' +
-                ", customerId='" + customerId + '\'' +
-                ", datetime=" + datetime +
-                ", items=" + items +
-                ", sum=" + sum;
-    }
-
-    @Override
     public int compareTo(Order o) {
         return this.datetime.compareTo(o.datetime);
     }
