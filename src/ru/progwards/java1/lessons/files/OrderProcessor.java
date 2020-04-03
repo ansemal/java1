@@ -11,7 +11,6 @@ import java.util.*;
 public class OrderProcessor{
     int errorsCount;
     String startPath;
-    List<OrderItem> orderItems = new LinkedList<>();
     LinkedList<Order> orders = new LinkedList<>();
     String [] csv;
 
@@ -36,25 +35,29 @@ public class OrderProcessor{
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
                     if (pathMatcher.matches(path)) {
+                        sum = 0;
                         if (pmShopID.matches(path)) {
                             LocalDate dateFile = LocalDate.ofInstant(attrs.lastModifiedTime().toInstant(), ZoneId.systemDefault());
                             // попадание в диапазон дат
                             if ((start == null || start.isBefore(dateFile) || start.equals(dateFile)) && (finish == null || finish.isAfter(dateFile) || finish.equals(dateFile))) {
                                 try {
                                     // чтение заказов из файла и наполнение списка OrderItems
+                                    List<OrderItem> orderItems = new LinkedList<>();
                                     List<String> orderItemStrings = Files.readAllLines(path);
                                     for (String orderItemString : orderItemStrings) {
                                         csv = orderItemString.split(", ");
-                                        try {
-                                            OrderItem orderItem = new OrderItem();
-                                            orderItem.price = Double.parseDouble(csv[2]);
-                                            orderItem.count = Integer.parseInt(csv[1]);
-                                            orderItem.googsName = csv[0];
-                                            orderItems.add(orderItem);
-                                            sum += orderItem.price;
-                                        } catch (Exception e) {
-                                            System.out.println("В одной из строк файла " + path.getFileName() + "проблема с числами");
-                                        }
+                                        if (csv.length == 3) {
+                                            try {
+                                                OrderItem orderItem = new OrderItem();
+                                                orderItem.price = Double.parseDouble(csv[2]);
+                                                orderItem.count = Integer.parseInt(csv[1]);
+                                                orderItem.goodsName = csv[0];
+                                                orderItems.add(orderItem);
+                                                sum += orderItem.price;
+                                            } catch (Exception e) {
+                                                throw new IOException("Проблемка в полях в формате файла " + path.getFileName());
+                                            }
+                                        } else throw new IOException("Проблемка в формате файла " + path.getFileName());
                                     }
                                     // наполнение списка orders
                                     Order order = new Order();
@@ -67,12 +70,12 @@ public class OrderProcessor{
                                     order.items = orderItems;
                                     orders.push(order);
                                 } catch (Exception e) {
+                                    errorsCount++; //  - подсчет файлов с ошибкой в формате
                                     System.out.println(e.getMessage());
                                 }
                             }
                         }
-                    } else
-                        errorsCount++;  // подсчет файлов с ошибкой в формате
+                    }
                     return FileVisitResult.CONTINUE;
                 }
 
@@ -119,9 +122,9 @@ public class OrderProcessor{
         TreeMap<String, Double> byGoods = new TreeMap<>();
         for (Order order: orders) {
             for (OrderItem orderItem: order.items) {
-                Double was = byGoods.putIfAbsent(orderItem.googsName, orderItem.price);
+                Double was = byGoods.putIfAbsent(orderItem.goodsName, orderItem.price);
                 if (was != null) {
-                    byGoods.put(orderItem.googsName, orderItem.price + was);
+                    byGoods.put(orderItem.goodsName, orderItem.price + was);
                 }
             }
         }
@@ -142,7 +145,9 @@ public class OrderProcessor{
 
     public static void main(String[] args) {
         OrderProcessor orderProcessor = new OrderProcessor("./каталог");
-        orderProcessor.loadOrders(LocalDate.parse("2020-04-01"), LocalDate.parse("2020-04-03"), null);
+//        orderProcessor.loadOrders(LocalDate.parse("2020-04-01"), LocalDate.parse("2020-04-03"), null);
+        System.out.println(orderProcessor.loadOrders(null, null, null));
+        orderProcessor.process(null);
         System.out.println(orderProcessor.orders.toString());
     }
 

@@ -1,7 +1,7 @@
 package ru.progwards.java1.lessons.files;
 
 public class OrderItem implements Comparable <OrderItem>{
-    public String googsName;  // - наименование товара
+    public String goodsName;  // - наименование товара
     public int count;  // - количество
     public double price;  // - цена за единицу
 
@@ -9,7 +9,14 @@ public class OrderItem implements Comparable <OrderItem>{
     }
 
     @Override
+    public String toString() {
+        return "\n goodsName='" + goodsName + '\'' +
+                ", count=" + count +
+                ", price=" + price;
+    }
+
+    @Override
     public int compareTo(OrderItem o) {
-        return this.googsName.compareTo(o.googsName);
+        return this.goodsName.compareTo(o.goodsName);
     }
 }
