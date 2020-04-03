@@ -53,7 +53,7 @@ public class OrderProcessor{
                                                 orderItem.count = Integer.parseInt(csv[1]);
                                                 orderItem.googsName = csv[0];
                                                 orderItems.add(orderItem);
-                                                sum += orderItem.price;
+                                                sum += orderItem.price*orderItem.count;
                                             } catch (Exception e) {
                                                 throw new IOException("Проблемка в полях в формате файла " + path.getFileName());
                                             }
