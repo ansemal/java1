@@ -32,7 +32,7 @@ public class SeaBattleAlg {
     //         8|X|.|.|.|.|.|.|X|.|.|
     //         9|X|.|.|.|X|.|.|.|.|.|
 
-    static char [][]field;
+/*    static char [][]field;
     int hits = 0;
     int palub4 = 0;
     int palub3 = 0;
@@ -123,9 +123,9 @@ public class SeaBattleAlg {
             }
         }
     }
-
+*/
     public void battleAlgorithm(SeaBattle seaBattle) {
-        init(seaBattle);
+/*        init(seaBattle);
         int i = 4;
         int j = 0;
         while (hits<20) {
@@ -158,6 +158,17 @@ public class SeaBattleAlg {
                 else if (palub4 == 1)
                     i = 3;
            }
+        }
+*/
+        int hits = 0;
+        for (int y = 0; y < seaBattle.getSizeX(); y++) {
+            for (int x = 0; x < seaBattle.getSizeY(); x++) {
+                SeaBattle.FireResult fireResult = seaBattle.fire(x, y);
+                if (fireResult != FireResult.MISS)
+                    hits++;
+                if (hits >= 20)
+                    return;
+            }
         }
     }
 
