@@ -280,19 +280,19 @@ public class SeaBattleAlg {
     }
 
     void diagonal () {
-        stepFire3(3);
-        stepFire3(1);
-        stepFire3(0);
-        stepFire3(2);
+//        stepFire3(3);
+//        stepFire3(1);
+//        stepFire3(0);
+//        stepFire3(2);
 
 //        stepFire2(4);
 //        stepFire2(3);
 //        stepFire2(2);
 //        stepFire2(1);
-//        stepFire(3);
-//        stepFire(1);
-//        stepFire(0);
-//        stepFire(2);
+        stepFire(3);
+        stepFire(1);
+        stepFire(0);
+        stepFire(2);
     }
 
     public void battleAlgorithm(SeaBattle seaBattle) {
