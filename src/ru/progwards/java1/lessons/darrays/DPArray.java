@@ -1,6 +1,7 @@
 package ru.progwards.java1.lessons.darrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class DPArray {
@@ -96,9 +97,18 @@ public class DPArray {
                         int nextFull = i+1;
                         // проверка - есть ли в следующем массиве место
                         while (!arEmpty) {
-                            if (array.get(nextFull)[capacity - 1] != null)
-                                nextFull++;
-                            else arEmpty = true;
+                            // не закончился ли список ?
+                            if (nextFull <= array.size()-1) {
+                                if (array.get(nextFull)[capacity - 1] != null)
+                                    nextFull++;
+                                else arEmpty = true;
+                            } else {
+                                // если закончился - добавляем массив с null
+                                Integer [] page = new Integer[capacity];
+                                Arrays.fill(page, null);
+                                array.add(page);
+                                arEmpty = true;
+                            }
                         }
                         // сдвигаем значения
                         for (int z = nextFull; z >= i; z--) {
