@@ -10,16 +10,32 @@ public class Calculator {
         int number=0;
         int nextNumber;
         int result = 0;
+        int count = 0;
+        int endTemp;
         boolean minus = false;
         for (int i = 0; i < expression.length(); i++) {
             if (i%2 == 0) {
                 if (expression.charAt(i) == '(') {
-                    int end = expression.indexOf(')', i+1);
+                    endTemp = i;
+                    do {  // проверка на вложенные скобки
+                        if (expression.indexOf('(', endTemp) !=-1 && expression.indexOf(')', endTemp) > expression.indexOf('(', endTemp)) {
+                            count++;
+                            endTemp = expression.indexOf('(', endTemp)+1;
+                        }
+                        if (expression.indexOf('(', endTemp) ==-1 || expression.indexOf(')', endTemp) < expression.indexOf('(', endTemp)) {
+                            count--;
+                            endTemp = expression.indexOf(')', endTemp+1);
+                        }
+                    } while (count != 0);
+
+                    int end = endTemp;
+                    // рекурсия на обработку вложенных скобок
                     nextNumber = calculate(expression.substring(i+1,end));
-                    i = end;
+                    i = endTemp;
                 } else
                     nextNumber=Integer.parseInt(expression.substring(i, i + 1));
 
+                // обработка арифметических операций - сложение вычитание - в список, умножение/деление - сразу
                 switch (str) {
                     case " ":
                         number = nextNumber;
@@ -65,6 +81,7 @@ public class Calculator {
             }
         }
 
+        // сложение/вычитание
         int size = sumAndSub.size();
         for (int i =0; i < size; i++) {
             result += sumAndSub.poll();
@@ -73,6 +90,7 @@ public class Calculator {
     }
 
     public static void main(String[] args) {
-        System.out.println(calculate("2*(3+4)*5-6/(1+2)"));
+       System.out.println(calculate("3*(2+4)*2"));
+       System.out.println(calculate("2*((2+(1+4))-1*2)*5-6/(1+2)"));
     }
 }
