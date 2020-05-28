@@ -28,9 +28,8 @@ public class Calculator {
                         }
                     } while (count != 0);
 
-                    int end = endTemp;
                     // рекурсия на обработку вложенных скобок
-                    nextNumber = calculate(expression.substring(i+1,end));
+                    nextNumber = calculate(expression.substring(i+1,endTemp));
                     i = endTemp;
                 } else
                     nextNumber=Integer.parseInt(expression.substring(i, i + 1));
@@ -48,8 +47,7 @@ public class Calculator {
                         break;
                     case "+":
                         if (minus) {
-                            number -= number * 2;
-                            sumAndSub.addLast(number);
+                            sumAndSub.addLast(-number);
                             number = nextNumber;
                             minus = false;
                         } else {
@@ -59,8 +57,7 @@ public class Calculator {
                         break;
                     case "-":
                         if (minus) {
-                            number -= number * 2;
-                            sumAndSub.addLast(number);
+                            sumAndSub.addLast(-number);
                             number = Integer.parseInt(expression.substring(i, i + 1));
                         } else {
                             sumAndSub.addLast(number);
@@ -75,7 +72,7 @@ public class Calculator {
 
             if (i == expression.length()-1) {
                 if (minus) {
-                    number -= number * 2;
+                    number = -number;
                 }
                 sumAndSub.addLast(number);
             }
@@ -90,7 +87,7 @@ public class Calculator {
     }
 
     public static void main(String[] args) {
-       System.out.println(calculate("3*(2+4)*2"));
-       System.out.println(calculate("2*((2+(1+4))-1*2)*5-6/(1+2)"));
+       System.out.println(calculate("3*(2-4)*2"));
+       System.out.println(calculate("2*((2+(1+4))-2+3-1*2)*5-6/(1+2)"));
     }
 }
