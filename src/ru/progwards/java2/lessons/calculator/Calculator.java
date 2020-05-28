@@ -48,22 +48,20 @@ public class Calculator {
                     case "+":
                         if (minus) {
                             sumAndSub.addLast(-number);
-                            number = nextNumber;
                             minus = false;
-                        } else {
+                        } else
                             sumAndSub.addLast(number);
-                            number = nextNumber;
-                        }
+                        number = nextNumber;
+
                         break;
                     case "-":
-                        if (minus) {
+                        if (minus)
                             sumAndSub.addLast(-number);
-                            number = Integer.parseInt(expression.substring(i, i + 1));
-                        } else {
+                        else {
                             sumAndSub.addLast(number);
-                            number = Integer.parseInt(expression.substring(i, i + 1));
                             minus = true;
                         }
+                        number = nextNumber;
                         break;
                 }
             }
