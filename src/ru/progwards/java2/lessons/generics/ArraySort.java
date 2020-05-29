@@ -22,5 +22,4 @@ public class ArraySort  {
         sort(mas);
         sort(mas1);
     }
-
 }

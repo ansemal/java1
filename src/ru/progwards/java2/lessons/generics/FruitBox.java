@@ -61,5 +61,4 @@ public class FruitBox<T extends Fruit> extends ArrayList <T> implements Comparab
             System.out.println(e.getMessage());
         }
     }
-
 }

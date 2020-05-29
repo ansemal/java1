@@ -1,7 +1,7 @@
 package ru.progwards.java2.lessons.generics;
 
 public class Fruit {
-    public float weight;
+    public final float weight;
 
     public Fruit(float weight) {
         this.weight = weight;

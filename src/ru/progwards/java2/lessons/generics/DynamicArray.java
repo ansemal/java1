@@ -89,6 +89,4 @@ public class DynamicArray <T> {
         System.out.println(b);
         System.out.println(b.get(2));
     }
-
-
 }
