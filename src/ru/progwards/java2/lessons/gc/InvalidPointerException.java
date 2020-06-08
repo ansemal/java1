@@ -9,8 +9,6 @@ public class InvalidPointerException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "InvalidPointerException{" +
-                "Неправильный указатель = " + wrongMark +
-                '}';
+        return "InvalidPointerException{" + "Неправильный указатель = " + wrongMark + '}';
     }
 }

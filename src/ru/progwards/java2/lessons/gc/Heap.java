@@ -23,9 +23,9 @@ public class Heap {
     }
 
     private byte[] bytes;
-    TreeMap<Integer, TreeSet<Integer>> freeBlock = new TreeMap<>();  // количество/множество указателей
-    TreeMap<Integer, Mark> markMap = new TreeMap<>();                // указатель/размер блока и свободен ли
-    HashMap<Integer, LinkedList<Integer>> codeMark = new HashMap<>();            // перекодированные указатели
+    TreeMap<Integer, TreeSet<Integer>> freeBlock = new TreeMap<>();      // количество/множество указателей
+    TreeMap<Integer, Mark> markMap = new TreeMap<>();                    // указатель/размер блока и свободен ли
+    HashMap<Integer, LinkedList<Integer>> codeMark = new HashMap<>();    // перекодированные указатели
     TreeMap<Integer, Integer> freeMarks = new TreeMap<>();
     Integer markBlock;
 

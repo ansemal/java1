@@ -9,8 +9,6 @@ public class OutOfMemoryException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "OutOfMemoryException{" +
-                " Невозможно найти память размером = " + size +
-                '}';
+        return "OutOfMemoryException{" + " Невозможно найти память размером = " + size + '}';
     }
 }
