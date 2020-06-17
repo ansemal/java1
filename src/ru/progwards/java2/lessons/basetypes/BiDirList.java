@@ -2,9 +2,10 @@ package ru.progwards.java2.lessons.basetypes;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Consumer;
 
-public class BiDirList <T> {
-
+public class BiDirList <T> implements Iterable<T>{
     class ListItem <T> {
 
         private T item;
@@ -63,16 +64,17 @@ public class BiDirList <T> {
         System.out.println("Такого значения нет");
     }
 
-    public void at(int i) {
+    public T at(int i) {
+        if (i<0) return null;
         int count = 0;
         for (Iterator<T> iter = this.getIterator(); iter.hasNext();) {
-            if (count == i) {
-                System.out.println(iter.next());
-                break;
-            } else
+            if (count == i)
+                return iter.next();
+            else
                 iter.next();
             count++;
         }
+        return null;
     }
 
     public int size() {
@@ -92,9 +94,8 @@ public class BiDirList <T> {
         return newList;
     }
 
-
     public void toArray(T[] array) {
-        if (size < array.length) {
+        if (size <= array.length) {
             int index = 0;
             for (Iterator<T> iter = this.getIterator(); iter.hasNext(); ) {
                 array[index] = iter.next();
@@ -106,7 +107,6 @@ public class BiDirList <T> {
         } else
             System.out.println("Количество элементов больше размера массива");
     }
-
 
     public Iterator<T> getIterator() {
 
@@ -144,6 +144,11 @@ public class BiDirList <T> {
         };
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return getIterator();
+    }
+
     public static void main(String[] args) {
         BiDirList <Integer> biDirList = new BiDirList<>();
         biDirList.addLast(5);
@@ -160,8 +165,12 @@ public class BiDirList <T> {
         Integer [] intmas = new Integer [] {1,2,3,4,5,6};
         BiDirList<Integer> list1 = BiDirList.from(intmas);
         BiDirList<String> list2 = BiDirList.of("Вася", "Петя", "Коля");
-        Integer [] intmas1 = new Integer[5];
+        Integer [] intmas1 = new Integer[6];
         list1.toArray(intmas1);
         System.out.println(Arrays.toString(intmas1));
+//        Iterator<Integer> itr = biDirList.iterator();
+        for (Integer item : biDirList) {
+            System.out.println(item);
+        }
     }
 }

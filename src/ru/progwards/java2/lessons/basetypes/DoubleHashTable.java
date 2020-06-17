@@ -3,7 +3,7 @@ package ru.progwards.java2.lessons.basetypes;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class DoubleHashTable <K, V> implements HashValue <K>{
+public class DoubleHashTable <K extends HashValue, V> {
     static class DHItem<K, V>{
 
         private V value;
@@ -28,28 +28,10 @@ public class DoubleHashTable <K, V> implements HashValue <K>{
 
     DHItem<K, V>[] table;
     int size = 0;
-    final double A;
+    static final double A =(Math.sqrt(5)-1)/2;
 
     DoubleHashTable () {
-        table = new DHItem[101];
-        A = (Math.sqrt(5)-1)/2;
-    }
-
-    @Override
-    public int getHash(K  key) {
-        int h = 0;
-        if (key instanceof String) {
-            // функция хэширования строк FAQ6
-            for (int i = 0; i < ((String) key).length(); ++i) {
-                h += ((String) key).charAt(i);
-                h += (h << 10);
-                h ^= (h >> 6);
-            }
-            h += (h << 3);
-            h ^= (h >> 11);
-            h += (h << 15);
-        } else h = (Integer) key;
-        return h;
+        table = new DHItem [101];
     }
 
     public int getHash1 (int uniKey) {
@@ -92,7 +74,7 @@ public class DoubleHashTable <K, V> implements HashValue <K>{
     }
 
 
-    // перестроение табблицы
+    // перестроение таблицы
     public void restructTable (DHItem<K, V> newItem) {
         DHItem<K, V>[] tableTemp = Arrays.copyOf(table, table.length);
         table = new DHItem[nearSimpleNum(table.length)];
@@ -105,23 +87,25 @@ public class DoubleHashTable <K, V> implements HashValue <K>{
     }
 
     public void add(K key, V value) {
+        boolean addOK = false;
         int collizCount = 0;
-        int uniKey = getHash(key);
+        int uniKey = key.getHash();
         int index = getHash1(uniKey);
         DHItem<K, V> newItem = new DHItem<>(key, value);
-        // первое пробирование
-        if (table[index] == null || table[index].delete) {
-            table[index] = newItem;
-        }
-        else {
-            collizCount++;
-            // расчет второго хэша и второе пробирование
-            index = (index + getHash2(uniKey)) % table.length;
-            if (table[index] == null || table[index].delete)
+        while (!addOK) {
+            // пробирование по первому хэшу
+            if (table[index] == null || table[index].delete) {
                 table[index] = newItem;
-            else {
-                // продолжаем линейное пробирование
-                while (table[index] != null && !table[index].delete) {
+                addOK = true;
+            } else {
+                collizCount++;
+                // пробирование по второму хэшу
+                int index2 = (index + getHash2(uniKey)) % table.length;
+                if (table[index2] == null || table[index2].delete) {
+                    table[index2] = newItem;
+                    addOK = true;
+                } else {
+                    // продолжаем линейное пробирование
                     index = isEndTable(index);
                     collizCount++;
                     if (collizCount > table.length / 10) {
@@ -131,54 +115,47 @@ public class DoubleHashTable <K, V> implements HashValue <K>{
                     }
                 }
             }
-            table[index] = newItem;
         }
         size++;
     }
 
     public V get(K key) {
-        int uniKey = getHash(key);
+        int uniKey = key.getHash();
         int index = getHash1(uniKey);
-        if (table[index] == null){
-            System.out.println("Данное значение не найдено");
-            return null;
+        while (table[index] != null) {
+            if (table[index].key.equals(key))
+                return table[index].value;
+            int index2 = (index + getHash2(uniKey)) % table.length;
+            if (table[index2].key.equals(key))
+                return table[index2].value;
+            index = isEndTable(index);
         }
-        if (!table[index].key.equals(key)) {
-            index = (index + getHash2(uniKey)) % table.length;
-            while (table[index] != null) {
-                if (table[index].key.equals(key)) {
-                    return table[index].value;
-                } else {
-                    index = isEndTable(index);
-                }
-            }
-            System.out.println("Данное значение не найдено");
-            return null;
-        }
-        return table[index].value;
-
+        System.out.println("Данное значение не найдено");
+        return null;
     }
 
     public void remove(K key) throws Exception {
-        int uniKey = getHash(key);
+        int uniKey = key.getHash();
         int index = getHash1(uniKey);
-        if (!table[index].key.equals(key)) {
-            index = (index + getHash2(uniKey)) % table.length;
-            while (table[index] != null) {
-                if (table[index].key.equals(key)) {
-                    table[index].delete = true;
-                    size--;
-                    break;
-                } else
-                    index = isEndTable(index);
+        while (table[index] != null) {
+            if (table[index].key.equals(key)) {
+                table[index].delete = true;
+                size--;
+                return;
             }
-            throw new Exception("Значение по ключу не найдено");
+            int index2 = (index + getHash2(uniKey)) % table.length;
+            if (table[index2].key.equals(key)) {
+                table[index2].delete = true;
+                size--;
+                return;
+            }
+            index = isEndTable(index);
         }
-        table[index].delete = true;
+        throw new Exception("Значение по ключу не найдено");
     }
 
     public void change(K key1, K key2) {
-        int uniKey = getHash(key1);
+        int uniKey = key1.getHash();
         int index = getHash1(uniKey);
         V value = get(key1);
         add(key2, value);
@@ -215,33 +192,40 @@ public class DoubleHashTable <K, V> implements HashValue <K>{
     }
 
     public static void main(String[] args) {
-        DoubleHashTable <String, String> dHT = new DoubleHashTable<>();
-        dHT.add("Преподаватель", "Василий");
+        DoubleHashTable <Person, String> dHT = new DoubleHashTable<>();
+        Person p1 = new Person("Василий", 35);
+        dHT.add(p1, "Преподаватель");
         System.out.println(Arrays.toString(dHT.table));
-        dHT.add("Космонавт", "Петр");
+        Person p2 = new Person("Петр", 56);
+        dHT.add(p2, "Космонавт");
         System.out.println(Arrays.toString(dHT.table));
-        dHT.add("Повар", "Иван");
+        Person p3 = new Person("Иван",25);
+        dHT.add(p3, "Повар");
         System.out.println(Arrays.toString(dHT.table));
-        dHT.add("Спортсмен", "Андрей");
+        Person p4 = new Person( "Андрей",44);
+        dHT.add(p4, "Спортсмен");
         System.out.println(Arrays.toString(dHT.table));
-        dHT.add("Бухгалтер", "Евгений");
+        Person p5 = new Person( "Евгений",30);
+        dHT.add(p5, "Бухгалтер");
         System.out.println(Arrays.toString(dHT.table));
-        dHT.add("Директор", "Николай");
+        Person p6 = new Person( "Николай",45);
+        dHT.add(p6,"Директор");
         System.out.println(Arrays.toString(dHT.table));
         System.out.println(dHT.size());
         System.out.println(dHT.table.length);
         try {
-            dHT.remove("Водитель");
+            dHT.remove(p3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         System.out.println(Arrays.toString(dHT.table));
-        for (Iterator<DHItem<String, String>> iter = dHT.getIterator(); iter.hasNext();) {
+        for (Iterator<DHItem<Person, String>> iter = dHT.getIterator(); iter.hasNext();) {
             System.out.println(iter.next());
         }
-        dHT.change("Повар", "Шеф-повар");
+        Person p7 = new Person("Олег", 55);
+        dHT.change(p1, p7);
         System.out.println(Arrays.toString(dHT.table));
-        dHT.get("Водитель");
+        dHT.get(p5);
 
 
 
