@@ -23,30 +23,36 @@ public class AvlTree <K extends Comparable<K>, V> implements Iterable<K> {
         }
 
         private TreeLeaf<K, V> find(K key) throws TreeException {
-            int cmp = key.compareTo(this.key);
-            if (cmp > 0)
-                if (right != null)
-                    return right.find(key);
-                else
-                    throw new TreeException(KEYNOTEXIST);
-             if (cmp < 0)
-                if (left != null)
-                    return left.find(key);
-                else
-                    throw new TreeException(KEYNOTEXIST);
-            return this;
+            TreeLeaf<K, V> isFind = this;
+            int cmp = 0;
+            do {
+                cmp = key.compareTo(isFind.key);
+                if (cmp > 0)
+                    if (right != null)
+                        isFind = isFind.right;
+                    else
+                        throw new TreeException(KEYNOTEXIST);
+                if (cmp < 0)
+                    if (left != null)
+                        isFind = isFind.left;
+                    else
+                        throw new TreeException(KEYNOTEXIST);
+            } while (cmp != 0);
+            return isFind;
         }
 
         private TreeLeaf<K, V> findMax () {
-            if (right == null)
-                return this;
-            return right.findMax();
+            TreeLeaf<K, V> isFind = this;
+            while (isFind.right != null)
+                isFind = isFind.right;
+            return isFind;
         }
 
         private TreeLeaf<K, V> findMin () {
-            if (left == null)
-                return this;
-            return left.findMin();
+            TreeLeaf<K, V> isFind = this;
+            while (isFind.left != null)
+                isFind = isFind.left;
+            return isFind;
         }
 
         // поиск замены удаляемому элементу

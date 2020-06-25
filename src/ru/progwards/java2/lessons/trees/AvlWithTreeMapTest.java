@@ -1,14 +1,8 @@
 package ru.progwards.java2.lessons.trees;
 
-import ru.progwards.java1.lessons.test.Except;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 
