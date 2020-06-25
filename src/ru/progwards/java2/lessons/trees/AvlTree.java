@@ -100,7 +100,7 @@ public class AvlTree <K extends Comparable<K>, V> implements Iterable<K> {
             if (balance == 2 || balance == -2)
                 doBalance();
             else if (balance == 1 || balance == -1) {
-                if (oper == Operation.DEL)
+                if (oper == Operation.DEL || (oper == Operation.PUT && this.equals(root)))
                     balanceOK = true;
             } else if (balance == 0) {
                 if (oper == Operation.PUT)
@@ -110,27 +110,32 @@ public class AvlTree <K extends Comparable<K>, V> implements Iterable<K> {
         }
 
         private void put (TreeLeaf<K, V> leaf) throws TreeException {
-            int cmp = leaf.key.compareTo(key);
-            if (cmp == 0)
-                throw new TreeException(KEYEXIST);
-            if (cmp > 0)
-                if (right != null) {
-                    right.put(leaf);
-                } else {
-                    right = leaf;
-                    leaf.parent = this;
-                }
-            else {
-                if (left != null) {
-                    left.put(leaf);
-                }else {
-                    left = leaf;
-                    leaf.parent = this;
+            TreeLeaf<K, V> putAt = this;
+            boolean putOK = false;
+            while (!putOK) {
+                int cmp = leaf.key.compareTo(putAt.key);
+                if (cmp == 0)
+                    throw new TreeException(KEYEXIST);
+                if (cmp > 0)
+                    if (putAt.right != null) {
+                        putAt = putAt.right;
+                    } else {
+                        putAt.right = leaf;
+                        leaf.parent = putAt;
+                        putOK = true;
+                    }
+                else {
+                    if (putAt.left != null) {
+                        putAt = putAt.left;
+                    } else {
+                        putAt.left = leaf;
+                        leaf.parent = putAt;
+                        putOK = true;
+                    }
                 }
             }
-            if (!balanceOK) {
-                balanceIsNorm(Operation.PUT);
-            }
+            while (!balanceOK)
+                putAt = putAt.balanceIsNorm(Operation.PUT);
         }
 
         // сделать балансировку
