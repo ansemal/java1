@@ -3,6 +3,7 @@ package ru.progwards.java2.lessons.trees;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,6 +14,7 @@ public class AvlWithTreeMapTest {
     TreeMap<String, String> map1 = new TreeMap<>();
     AvlTree<Integer, Integer> avl = new AvlTree<>();
     AvlTree<String, String> avl1 = new AvlTree<>();
+    ArrayList<Integer> list = new ArrayList<>();
 
 
     public void addSort () throws TreeException {
@@ -68,11 +70,11 @@ public class AvlWithTreeMapTest {
         System.out.println("map - " + (lstop-lstart));
     }
 
-    public void addRandom () throws TreeException {
+    public void addRandom (int less) throws TreeException {
         map.clear();
         avl = new AvlTree<>();
-        System.out.println("Вставка " + ITERATIONS/10 + " элементов");
-        for (int i=0; i <= ITERATIONS/10; i++) {
+        System.out.println("Вставка " + ITERATIONS/less + " итераций (в " + less + " раз меньше сортированных)");
+        for (int i=0; i <= ITERATIONS/less; i++) {
             int key = ThreadLocalRandom.current().nextInt();
             if (!map.containsKey(key)) {
                 lstart = System.currentTimeMillis();
@@ -84,6 +86,8 @@ public class AvlWithTreeMapTest {
                 map.put(key, key);
                 lstop = System.currentTimeMillis();
                 result2 += lstop-lstart;
+
+                list.add(key);
             }
         }
         System.out.println("avl - " + result1);
@@ -93,20 +97,17 @@ public class AvlWithTreeMapTest {
     public void findRandom () throws TreeException {
         result1 = 0;
         result2 = 0;
-        System.out.println("Поиск " + ITERATIONS + " итераций");
-        for (int i=0; i <= ITERATIONS; i++) {
-            int key = ThreadLocalRandom.current().nextInt();
-            if (map.containsKey(key)) {
-                lstart = System.currentTimeMillis();
-                avl.find(key);
-                lstop = System.currentTimeMillis();
-                result1 += lstop-lstart;
+        System.out.println("Поиск " + list.size() + " значений");
+        for (int key : list) {
+            lstart = System.currentTimeMillis();
+            avl.find(key);
+            lstop = System.currentTimeMillis();
+            result1 += lstop - lstart;
 
-                lstart = System.currentTimeMillis();
-                map.get(key);
-                lstop = System.currentTimeMillis();
-                result2 += lstop-lstart;
-           }
+            lstart = System.currentTimeMillis();
+            map.get(key);
+            lstop = System.currentTimeMillis();
+            result2 += lstop - lstart;
         }
         System.out.println("avl - " + result1);
         System.out.println("map - " + result2);
@@ -115,20 +116,17 @@ public class AvlWithTreeMapTest {
     public void delRandom () throws TreeException {
         result1 = 0;
         result2 = 0;
-        System.out.println("Удаление " + ITERATIONS + " итераций");
-        for (int i=0; i <= ITERATIONS; i++) {
-            int key = ThreadLocalRandom.current().nextInt();
-            if (map.containsKey(key)) {
-                lstart = System.currentTimeMillis();
-                avl.delete(key);
-                lstop = System.currentTimeMillis();
-                result1 += lstop-lstart;
+        System.out.println("Удаление " + list.size() + " значений");
+        for (int key : list) {
+            lstart = System.currentTimeMillis();
+            avl.delete(key);
+            lstop = System.currentTimeMillis();
+            result1 += lstop - lstart;
 
-                lstart = System.currentTimeMillis();
-                map.remove(key);
-                lstop = System.currentTimeMillis();
-                result2 += lstop-lstart;
-            }
+            lstart = System.currentTimeMillis();
+            map.remove(key);
+            lstop = System.currentTimeMillis();
+            result2 += lstop - lstart;
         }
         System.out.println("avl - " + result1);
         System.out.println("map - " + result2);
@@ -137,17 +135,17 @@ public class AvlWithTreeMapTest {
     public void addStr (String [] strArr) throws TreeException {
         map.clear();
         System.out.println("Вставка" );
-        for (int i=0; i < strArr.length; i++) {
-            if (!map1.containsKey(strArr[i])) {
+        for (String s : strArr) {
+            if (!map1.containsKey(s)) {
                 lstart = System.currentTimeMillis();
-                avl1.put(strArr[i],strArr[i]);
+                avl1.put(s, s);
                 lstop = System.currentTimeMillis();
-                result1 += lstop-lstart;
+                result1 += lstop - lstart;
 
                 lstart = System.currentTimeMillis();
-                map1.put(strArr[i], strArr[i]);
+                map1.put(s, s);
                 lstop = System.currentTimeMillis();
-                result2 += lstop-lstart;
+                result2 += lstop - lstart;
             }
         }
         System.out.println("avl - " + result1);
@@ -158,18 +156,17 @@ public class AvlWithTreeMapTest {
         result1 = 0;
         result2 = 0;
         System.out.println("Поиск слов");
-        for (int i=0; i < strArr.length; i++) {
-            String key = strArr[i];
+        for (String key : strArr) {
             if (map1.containsKey(key)) {
                 lstart = System.currentTimeMillis();
                 avl1.find(key);
                 lstop = System.currentTimeMillis();
-                result1 += lstop-lstart;
+                result1 += lstop - lstart;
 
                 lstart = System.currentTimeMillis();
                 map1.get(key);
                 lstop = System.currentTimeMillis();
-                result2 += lstop-lstart;
+                result2 += lstop - lstart;
             }
         }
         System.out.println("avl - " + result1);
@@ -180,18 +177,17 @@ public class AvlWithTreeMapTest {
         result1 = 0;
         result2 = 0;
         System.out.println("Удаление слов");
-        for (int i=0; i < strArr.length; i++) {
-            String key = strArr[i];
+        for (String key : strArr) {
             if (map1.containsKey(key)) {
                 lstart = System.currentTimeMillis();
                 avl1.delete(key);
                 lstop = System.currentTimeMillis();
-                result1 += lstop-lstart;
+                result1 += lstop - lstart;
 
                 lstart = System.currentTimeMillis();
                 map1.remove(key);
                 lstop = System.currentTimeMillis();
-                result2 += lstop-lstart;
+                result2 += lstop - lstart;
             }
         }
         System.out.println("avl - " + result1);
@@ -212,7 +208,7 @@ public class AvlWithTreeMapTest {
         System.out.println();
         System.out.println("Случайные данные:");
         try {
-            avlTest.addRandom();
+            avlTest.addRandom(5);
             avlTest.findRandom();
             avlTest.delRandom();
         } catch (Exception ex) {
