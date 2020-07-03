@@ -1,9 +1,5 @@
 package ru.progwards.java2.lessons.reflection;
 
-//import java.lang.reflect.*;
-
-import java.io.FileWriter;
-
 public class Person {
     public String name;
     private int age;
