@@ -43,15 +43,6 @@ public class DoubleHashTable <K extends HashValue, V> {
         return (int) (table.length*(d-Math.floor(d)));
     }
 
-    // проверка на конец таблицы
-    public int isEndTable (int index) {
-        if (index == table.length - 1)   // проверка на конец таблицы
-            index = 0;
-        else
-            index++;
-        return index;
-    }
-
     // вычисление ближайшего простого числа
     public int nearSimpleNum (int realSize) {
         int newSize = realSize*2;
@@ -73,7 +64,6 @@ public class DoubleHashTable <K extends HashValue, V> {
         return newSize;
     }
 
-
     // перестроение таблицы
     public void restructTable (DHItem<K, V> newItem) {
         DHItem<K, V>[] tableTemp = Arrays.copyOf(table, table.length);
@@ -84,74 +74,70 @@ public class DoubleHashTable <K extends HashValue, V> {
                 add(oldIt.key, oldIt.value);
         }
         add(newItem.key, newItem.value);
+        size++;
     }
 
     public void add(K key, V value) {
-        boolean addOK = false;
-        int collizCount = 0;
-        int uniKey = key.getHash();
-        int index = getHash1(uniKey);
+        boolean addOK = false;                      // произошло ли добавление
+        int collizCount = 0;                        // количество коллизий
+        int uniKey = key.getHash();                 // унифицированный ключ
+        int index = getHash1(uniKey);               // индекс по первой хэш-функции
+        int step = getHash2(uniKey);                // шаг при двойном хэшировании
         DHItem<K, V> newItem = new DHItem<>(key, value);
         while (!addOK) {
-            // пробирование по первому хэшу
+            if (collizCount > 0)
+                index = (index + step) % table.length;          // пробирование по второму хэшу
             if (table[index] == null || table[index].delete) {
                 table[index] = newItem;
+                if (table[index].delete)
+                    table[index].delete = false;
                 addOK = true;
             } else {
                 collizCount++;
-                // пробирование по второму хэшу
-                int index2 = (index + getHash2(uniKey)) % table.length;
-                if (table[index2] == null || table[index2].delete) {
-                    table[index2] = newItem;
-                    addOK = true;
-                } else {
-                    // продолжаем линейное пробирование
-                    index = isEndTable(index);
-                    collizCount++;
-                    if (collizCount > table.length / 10) {
-                        // количество коллизий больше 10 % - перестраиваем таблицу
-                        restructTable(newItem);
-                        return;
-                    }
+                if (collizCount > table.length / 10) { // количество коллизий больше 10 % - перестраиваем таблицу
+                    restructTable(newItem);
+                    return;
                 }
             }
         }
         size++;
     }
 
-    public V get(K key) {
+    public Integer getIndex (K key) {
         int uniKey = key.getHash();
         int index = getHash1(uniKey);
-        while (table[index] != null) {
-            if (table[index].key.equals(key))
-                return table[index].value;
-            int index2 = (index + getHash2(uniKey)) % table.length;
-            if (table[index2].key.equals(key))
-                return table[index2].value;
-            index = isEndTable(index);
+        int step;
+        if (table[index] != null && table[index].key.equals(key))
+            return index;
+        else if (table[index] != null) {
+            step = getHash2(uniKey);
+            index = (index + step) % table.length;
+            while (table[index] != null) {
+                if (table[index].key.equals(key))
+                    return index;
+                index = (index + step) % table.length;
+            }
         }
-        System.out.println("Данное значение не найдено");
         return null;
     }
 
-    public void remove(K key) throws Exception {
-        int uniKey = key.getHash();
-        int index = getHash1(uniKey);
-        while (table[index] != null) {
-            if (table[index].key.equals(key)) {
-                table[index].delete = true;
-                size--;
-                return;
-            }
-            int index2 = (index + getHash2(uniKey)) % table.length;
-            if (table[index2].key.equals(key)) {
-                table[index2].delete = true;
-                size--;
-                return;
-            }
-            index = isEndTable(index);
+    public V get(K key) {
+        Integer index = getIndex(key);
+        if (index != null)
+            return table[index].value;
+        else {
+            System.out.println("Данное значение не найдено");
+            return null;
         }
-        throw new Exception("Значение по ключу не найдено");
+    }
+
+    public void remove(K key) throws Exception {
+        Integer index = getIndex(key);
+        if (index != null) {
+            table[index].delete = true;
+            size--;
+        } else
+            throw new Exception("Значение по ключу не найдено");
     }
 
     public void change(K key1, K key2) {
