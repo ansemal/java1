@@ -2,21 +2,21 @@ package ru.progwards.java2.lessons.classloader;
 
 public class StatisticInfo {
         public String sectionName; // - имя секции
-        public int fullTime; // - полное время выполнения секции в миллисекундах.
-        public int selfTime; // - чистое время выполнения секции в миллисекундах. Для вложенных секций, из времени выполнения внешней секции нужно вычесть времена выполнения вложенных секций.
+        public long fullTime; // - полное время выполнения секции в наносекундах.
+        public long selfTime; // - чистое время выполнения секции в наносекундах. Для вложенных секций, из времени выполнения внешней секции нужно вычесть времена выполнения вложенных секций.
         public int count;
 
         @Override
         public String toString() {
             return "StatisticInfo{" +
                     "sectionName='" + sectionName + '\'' +
-                    ", fullTime=" + fullTime +
-                    ", selfTime=" + selfTime +
+                    ", fullTime=" + fullTime/1000000 +         // для перевода в милисекунды
+                    ", selfTime=" + selfTime/1000000 +         // для перевода в милисекунды
                     ", count=" + count +
                     '}';
         }
 
-        public StatisticInfo(String sectionName, int fullTime, int selfTime, int count) {
+        public StatisticInfo(String sectionName, long fullTime, long selfTime, int count) {
             this.sectionName = sectionName;
             this.fullTime = fullTime;
             this.selfTime = selfTime;

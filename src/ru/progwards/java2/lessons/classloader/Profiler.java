@@ -1,17 +1,15 @@
 package ru.progwards.java2.lessons.classloader;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class Profiler {
-    public static int timeTemp = 0;   // - время работы вложенной секции
+    public static long timeTemp = 0;   // - время работы вложенной секции
     private static Integer countVlozSec = 0;  // - счетчик работающих вложенных секций
     static boolean vlozInc;                      // вход в новую секцию?
 
     static TreeMap<String, StatisticInfo> profilMapResult = new TreeMap<>();
-    static Map<String, LocalDateTime> rabota = new TreeMap<>();
-    static Map <String, Integer> vlozTempTime = new HashMap<>();
+    static Map<String, Long> rabota = new TreeMap<>();
+    static Map <String, Long> vlozTempTime = new HashMap<>();
 
     public static void enterSection(String name) {
         countVlozSec++;
@@ -21,19 +19,15 @@ public class Profiler {
             }
             timeTemp = 0;
         }
-        vlozTempTime.put(name, 0);
-        LocalDateTime start = LocalDateTime.now();
-        rabota.put(name, start);
+        vlozTempTime.put(name, 0L);
+        rabota.put(name, System.nanoTime());
         vlozInc = true;
     }
 
     public static void exitSection(String name) {
-        int fulltimeS;
         countVlozSec--;
-        LocalDateTime start = rabota.get(name);
-        LocalDateTime finish = LocalDateTime.now();
-        fulltimeS = (int) Duration.between(start, finish).toMillis();
-        int selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name);
+        long fulltimeS = System.nanoTime()-rabota.get(name);
+        long selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name);
         vlozTempTime.remove(name);
         if (countVlozSec != 0) {
             timeTemp = fulltimeS;
