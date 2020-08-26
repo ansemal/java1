@@ -9,17 +9,25 @@ public class Profiler {
 
     static TreeMap<String, StatisticInfo> profilMapResult = new TreeMap<>();
     static Map<String, Long> rabota = new TreeMap<>();
-    static Map <String, Long> vlozTempTime = new HashMap<>();
+    static Map <String, LinkedList<Long>> vlozTempTime = new HashMap<>();
+//    static Map <String, Long> vlozTempTime = new HashMap<>();
+
 
     public static void enterSection(String name) {
         countVlozSec++;
         if (countVlozSec > 1 && !vlozInc) {    // если при открытых секциях после закрытия не всех снова пошёл вход
             for (var entry: vlozTempTime.entrySet()) {           // сохраняем время работы вложенных секций до этого
-                entry.setValue(entry.getValue() + timeTemp);
+                for (Long time: entry.getValue()) {
+                    time += timeTemp;
+                }
+//                entry.setValue(entry.getValue() + timeTemp);
             }
             timeTemp = 0;
         }
-        vlozTempTime.put(name, 0L);
+        LinkedList <Long> list = vlozTempTime.containsKey(name) ? vlozTempTime.get(name): new LinkedList<>();
+        list.push(0L);
+        vlozTempTime.put(name, list);
+//        vlozTempTime.put(name, 0L);
         rabota.put(name, System.nanoTime());
         vlozInc = true;
     }
@@ -27,8 +35,9 @@ public class Profiler {
     public static void exitSection(String name) {
         countVlozSec--;
         long fulltimeS = System.nanoTime()-rabota.get(name);
-        long selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name);
-        vlozTempTime.remove(name);
+        long selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name).pop();
+        if (vlozTempTime.get(name).isEmpty())
+            vlozTempTime.remove(name);
         if (countVlozSec != 0) {
             timeTemp = fulltimeS;
         } else timeTemp = 0;
