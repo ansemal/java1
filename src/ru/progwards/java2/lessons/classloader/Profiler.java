@@ -10,7 +10,6 @@ public class Profiler {
     static TreeMap<String, StatisticInfo> profilMapResult = new TreeMap<>();
     static Map<String, Long> rabota = new TreeMap<>();
     static Map <String, LinkedList<Long>> vlozTempTime = new HashMap<>();
-//    static Map <String, Long> vlozTempTime = new HashMap<>();
 
 
     public static void enterSection(String name) {
@@ -20,14 +19,12 @@ public class Profiler {
                 for (Long time: entry.getValue()) {
                     time += timeTemp;
                 }
-//                entry.setValue(entry.getValue() + timeTemp);
             }
             timeTemp = 0;
         }
         LinkedList <Long> list = vlozTempTime.containsKey(name) ? vlozTempTime.get(name): new LinkedList<>();
         list.push(0L);
         vlozTempTime.put(name, list);
-//        vlozTempTime.put(name, 0L);
         rabota.put(name, System.nanoTime());
         vlozInc = true;
     }
@@ -38,9 +35,7 @@ public class Profiler {
         long selftimeS = fulltimeS - timeTemp - vlozTempTime.get(name).pop();
         if (vlozTempTime.get(name).isEmpty())
             vlozTempTime.remove(name);
-        if (countVlozSec != 0) {
-            timeTemp = fulltimeS;
-        } else timeTemp = 0;
+        timeTemp = countVlozSec != 0 ? fulltimeS : 0;
 
         StatisticInfo stillNot = profilMapResult.putIfAbsent(name, new StatisticInfo(name, fulltimeS, selftimeS, 1));
         if (stillNot != null) {
@@ -57,12 +52,4 @@ public class Profiler {
         itog.add(entry.getValue());
         return itog;
         }
-
-    public static void main(String[] args) {
-        enterSection("1");
-        for (int i = 0; i < 1; i++) {
-            int j = (int) Math.pow(5, i);
-        }
-        exitSection("1");
-    }
 }
