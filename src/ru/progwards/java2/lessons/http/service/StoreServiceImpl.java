@@ -1,0 +1,47 @@
+package ru.progwards.java2.lessons.http.service;
+
+import ru.progwards.java2.lessons.http.Account;
+import ru.progwards.java2.lessons.http.Store;
+
+
+import java.util.Collection;
+
+public class StoreServiceImpl implements StoreService{
+    @Override
+    public Account get(String id) {
+        Account account = Store.getStore().get(id);
+        if (account == null){
+            throw new RuntimeException("ru.progwards.java2.lessons.http.Account not found by id:"+id);
+        }
+        return account;
+    }
+
+    @Override
+    public Collection<Account> get() {
+        if(Store.getStore().size() == 0){
+            throw new RuntimeException("ru.progwards.java2.lessons.http.ru.progwards.java2.lessons.http.Store is empty");
+        }
+        return Store.getStore().values();
+    }
+
+    @Override
+    public void delete(String id) {
+        if (Store.getStore().get(id) == null){
+            throw new RuntimeException("ru.progwards.java2.lessons.http.Account not found by id:"+id);
+        }
+        Store.getStore().remove(id);
+    }
+
+    @Override
+    public void insert(Account account) {
+        Store.getStore().put(account.getId(), account);
+    }
+
+    @Override
+    public void update(Account account) {
+        if (Store.getStore().get(account.getId()) == null){
+            throw new RuntimeException("ru.progwards.java2.lessons.http.Account not found by id:"+account.getId());
+        }
+        this.insert(account);
+    }
+}
