@@ -4,10 +4,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Store {
 
-    private static Map<String, Account> store = new HashMap<>();
+    private static ConcurrentHashMap<String, Account> store = new ConcurrentHashMap<>();
 
     static {
         for (int i = 0; i < 10 ; i++) {
@@ -23,7 +24,7 @@ public class Store {
         }
     }
 
-    public static Map<String, Account> getStore(){
+    public static ConcurrentHashMap<String, Account> getStore(){
         return store;
     }
 }

@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BankServer {
-    public static Map<String, Account> store = Store.getStore();
+    public static ConcurrentHashMap<String, Account> store = Store.getStore();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(4500);
