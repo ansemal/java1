@@ -1,26 +1,22 @@
 package ru.progwards.java2.lessons.patterns.proxyGPS;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 public class FilterSpeedGps implements Speed {
-    private SpeedGps speedGPS;
+    private final SpeedGps speedGPS;
     double mathExpectation;                  // матожидание
-    ArrayDeque<Double> speeds;               // 50 последних скоростей для вычисления 3 сигм
+    double dispersion;                       // дисперсия
     double sigma;                            //среднеквадратичное отклонение
+    public ArrayList<GPS> gpspoints;
+    int count = 0;
 
     FilterSpeedGps(SpeedGps speedGPS) {
         this.speedGPS = speedGPS;
-        speeds = new ArrayDeque<>();
     }
 
     @Override
     public void parse(String name) {
-        speedGPS.parse(name);
-    }
-
-    @Override
-    public double distBetween(GPS gps1, GPS gps2) {
-        return speedGPS.distBetween(gps1, gps2);
+        gpspoints = SaxParseGpxXml.parsing(name);
     }
 
     @Override
@@ -29,61 +25,72 @@ public class FilterSpeedGps implements Speed {
     }
 
     @Override
-    public void track(String name) {
-        parse(name);
-        // первые 50 точек для статистики
-        for (int i=0; i<50; i++) {
-            double pointSpeed = speed(speedGPS.gpspoints.get(i));
-            speeds.offerLast(pointSpeed);
-            System.out.printf("Текущая скорость - %.2f м/с\n", pointSpeed);
-        }
+    // получение и обработка новой сгенерированной точки
+    public void receiveGpsPoint(GPS gpsPoint) {
+        boolean excess = false;
+        double speedNow = speed(gpsPoint);
 
-        calcSigma();
+        // первые 50 точек отправляем без фильтрации, остальные фильтруются на выброс
+        if (count <=50) {
+            calcSigma(speedNow);
+            speedGPS.lastGPS = gpsPoint;
+            count++;
+        } else
+            excess = checkPoint(gpsPoint, speedNow);
 
-        int mistake = 0;
-        for (int i = 50; i<speedGPS.gpspoints.size()-1; i++) {
-            double pointSpeed = speed(speedGPS.gpspoints.get(i));
-            speeds.pollFirst();
-            speeds.offerLast(pointSpeed);
-            if ((pointSpeed > mathExpectation - 3*sigma) && (pointSpeed < mathExpectation + 3*sigma)) {
-                System.out.printf("Текущая скорость - %.2f м/с\n", pointSpeed);
-                if (mistake!=0)
-                    mistake = 0;
-            } else {
-                mistake ++;
-                System.out.printf("Выход за пределы 3 сигм - %.2f м/с\n", pointSpeed);
-                //если подряд вылетают 9 точек, возможно
-                // какое-то серьезное изменение - проводим пересчет статистики
-                // условие можно поменять на другое, более обоснованное
-                if (mistake > 8) {
-                    System.out.println("Пересчет статистики");
-                    calcSigma();
-                }
-            }
-        }
+        //Если точка в пределах - идет на соответствующую обработку или пропускается
+        if ((!excess))
+            result(speedNow);
+        else
+            System.out.println("произошел выброс - " + speedNow);
     }
 
-    public void calcSigma() {
-        ArrayDeque<Double> speedsTemp = new ArrayDeque<>(speeds);
-        double sum = 0;
+    // проверка точки на выброс
+    public boolean checkPoint (GPS gpsPoint, double speedNow) {
+        boolean wasExcess = false;
+        // если был выброс
+        if ((!(speedNow > mathExpectation - 3 * sigma)) || (!(speedNow < mathExpectation + 3 * sigma)))
+            wasExcess = true;
+
+        calcSigma(speedNow);
+        count++;
+        speedGPS.lastGPS = gpsPoint;
+        return wasExcess;
+    }
+
+    @Override
+    public void trackToGpsPoint(String name) {
+        parse(name);
+        for (GPS point : gpspoints)
+            receiveGpsPoint(point);
+    }
+
+    @Override
+    // обработка точки - какие-то действия - прорисовка карты и т.п.
+    public void result(double speedNow) {
+        speedGPS.result(speedNow);
+    }
+
+    public void calcSigma (double speedNow) {
+        // почему-то в одном из треков в двух точках скорость становилась infinity
+        // поэтому ввел эту проверку
+        if (Double.isInfinite(speedNow)) return;
+
+        int countNext = count+1;
+
         // мат ожидание
-        while (!speedsTemp.isEmpty())
-            sum += speedsTemp.pollFirst();
-        mathExpectation = sum / 50;
-        System.out.printf("Матожидание " + "%.3f" + " м/с\n", mathExpectation);
+        // рекур формула  (N-1/N)M + (1/N * x)
+        mathExpectation = (count * mathExpectation / countNext) + (speedNow/ countNext);
+//        System.out.printf("Матожидание " + "%.3f" + " м/с\n", mathExpectation);
 
         // дисперсия
-        speedsTemp = new ArrayDeque<>(speeds);
-        sum = 0;
-        while (!speedsTemp.isEmpty()) {
-            double diff = mathExpectation - speedsTemp.pollFirst();
-            sum += diff * diff;
-        }
-        double dispersion = sum / 50;
-        System.out.printf("Дисперсия " + "%.3f" + " м/с\n", dispersion);
+        dispersion = (count * dispersion / countNext) + (mathExpectation - speedNow)*(mathExpectation-speedNow)/ countNext;
+//        System.out.printf("Дисперсия " + "%.3f" + " м/с\n", dispersion);
 
         // средеквадр отклонение
         sigma = Math.sqrt(dispersion);
-        System.out.printf("Отклонение " + "%.3f" + " м/с\n" + "3 сигма " + "%.3f" + " м/с\n", sigma, 3 * sigma);
+//        System.out.printf("Отклонение " + "%.3f" + " м/с\n" + "3 сигма " + "%.3f" + " м/с\n", sigma, 3 * sigma);
+
+        count = countNext;
     }
 }

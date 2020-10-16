@@ -5,7 +5,7 @@ import ru.progwards.java2.lessons.classloader.StatisticInfo;
 import java.util.*;
 
 public enum  SingletonProfiler {
-    INSTANSE ();
+    INSTANSE;
 
     private long timeTemp = 0;   // - время работы вложенной секции
     private Integer countVlozSec = 0;  // - счетчик работающих вложенных секций

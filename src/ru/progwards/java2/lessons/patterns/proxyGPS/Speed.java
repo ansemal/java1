@@ -2,11 +2,13 @@ package ru.progwards.java2.lessons.patterns.proxyGPS;
 
 public interface Speed {
     //парсинг gps-трекера в xml
-    public void parse (String name);
-    //расстояние между двумя точками в метрах
-    public double distBetween(GPS gps1, GPS gps2);
+    void parse(String name);
     //скорость между двумя точками
-    public double speed (GPS gps);
-    //обработка точек
-    public void track (String name);
+    double speed(GPS gps);
+    //имитация получения точки при движении
+    void receiveGpsPoint(GPS point);
+    //"генерация" точек из трека
+    void trackToGpsPoint(String name);
+    //вывод (нанесение на карту, показатель скорости и т.п.)
+    void result(double speedNow);
 }
