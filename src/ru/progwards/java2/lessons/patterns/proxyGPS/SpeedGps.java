@@ -6,6 +6,7 @@ public class SpeedGps implements Speed{
     public ArrayList<GPS> gpspoints;
     final static double EARTHRADIUS = 6371000; //радиус земли в метрах
     GPS lastGPS;                               // последняя точка gps
+    double lastSpeed;
 
     @Override
     public void parse(String name) {
@@ -22,16 +23,24 @@ public class SpeedGps implements Speed{
         return c * EARTHRADIUS;
     }
 
+//    @Override
+//    public double speed (GPS gpsPoint) {
+//        return (lastGPS!=null) ? distBetween(lastGPS, gpsPoint)/(gpsPoint.time-lastGPS.time): 0;
+//    }
+
     @Override
-    public double speed (GPS gpsPoint) {
-        return (lastGPS!=null) ? distBetween(lastGPS, gpsPoint)/(gpsPoint.time-lastGPS.time): 0;
+    public double acceleration (GPS gpsPoint) {
+        double speed = (lastGPS!=null) ? distBetween(lastGPS, gpsPoint)/ (gpsPoint.time-lastGPS.time): 0;
+        double acceleration = (lastGPS!=null) ? (speed - lastSpeed)/ (gpsPoint.time-lastGPS.time) : 0;
+        lastSpeed = speed;
+        return acceleration;
     }
 
     @Override
     public void receiveGpsPoint(GPS gpsPoint) {
-        double speedNow = speed(gpsPoint);
+        double acceleration = acceleration(gpsPoint);
         lastGPS = gpsPoint;
-        result(speedNow);
+        result(acceleration);
     }
 
     @Override
@@ -42,8 +51,8 @@ public class SpeedGps implements Speed{
     }
 
     @Override
-    public void result(double speedNow) {
-        System.out.printf("Точка нанесена на карту, Текущая скорость - %.2f м/с\n", speedNow);
+    public void result(double acceleration) {
+        System.out.printf("Точка нанесена на карту, Текущее ускорение - %.2f м/с2\n", acceleration);
     }
 
     public static void main(String[] args) {
