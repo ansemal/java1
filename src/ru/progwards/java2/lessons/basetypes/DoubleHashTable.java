@@ -43,22 +43,23 @@ public class DoubleHashTable <K extends HashValue, V> {
         return (int) (table.length*(d-Math.floor(d)));
     }
 
-    // вычисление ближайшего простого числа
+    // удвоение размера таблицы и вычисление ближайшего простого числа
     public int nearSimpleNum (int realSize) {
-        int newSize = realSize*2;
+        int newSize = realSize * 2;                    // удвоение размера таблицы
         boolean simple = false;
         while (!simple) {
             if (newSize % 2 == 0)
                 newSize++;
             else {
+                simple = true;
                 int temp = (int) Math.round(Math.sqrt(newSize));
                 for (int i = 3; i <= temp; i += 2) {
                     if (newSize % i == 0) {
+                        simple = false;
                         newSize++;
                         break;
                     }
                 }
-                simple = true;
             }
         }
         return newSize;
