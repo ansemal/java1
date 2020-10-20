@@ -1,16 +1,16 @@
 package ru.progwards.java2.lessons.basetypes;
 
 public interface HashValue {
-    String getKey();
+    String toHash();
 
     default int getHash() {
         int hash = 0;
         try {
-            hash = Integer.parseInt(getKey());
+            hash = Integer.parseInt(toHash());
         } catch (Exception ex) {
             // функция хэширования строк FAQ6
-            for (int i = 0; i < getKey().length(); ++i) {
-                hash += getKey().charAt(i);
+            for (int i = 0; i < toHash().length(); ++i) {
+                hash += toHash().charAt(i);
                 hash += (hash << 10);
                 hash ^= (hash >> 6);
             }

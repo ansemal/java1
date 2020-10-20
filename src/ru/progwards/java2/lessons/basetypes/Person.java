@@ -27,7 +27,7 @@ public class Person implements HashValue {
     }
 
     @Override
-    public String getKey() {
+    public String toHash() {
         return Integer.toString(age);
     }
 }

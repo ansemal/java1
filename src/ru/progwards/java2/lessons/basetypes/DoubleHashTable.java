@@ -44,7 +44,7 @@ public class DoubleHashTable <K extends HashValue, V> {
     }
 
     // удвоение размера таблицы и вычисление ближайшего простого числа
-    public int nearSimpleNum (int realSize) {
+    public int nearSimpleToDoubleSize(int realSize) {
         int newSize = realSize * 2;                    // удвоение размера таблицы
         boolean simple = false;
         while (!simple) {
@@ -68,7 +68,7 @@ public class DoubleHashTable <K extends HashValue, V> {
     // перестроение таблицы
     public void restructTable (DHItem<K, V> newItem) {
         DHItem<K, V>[] tableTemp = Arrays.copyOf(table, table.length);
-        table = new DHItem[nearSimpleNum(table.length)];
+        table = new DHItem[nearSimpleToDoubleSize(table.length)];
         size = 0;
         for (DHItem<K, V> oldIt : tableTemp) {
             if (oldIt != null && !oldIt.delete)
