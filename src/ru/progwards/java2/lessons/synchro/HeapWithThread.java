@@ -18,7 +18,6 @@ public class HeapWithThread {
             this.startMark = startMark;
         }
 
-
         void setSizeBlock (int sizeBlock) {
             this.sizeBlock = sizeBlock;
         }
@@ -30,6 +29,7 @@ public class HeapWithThread {
             int ptr1 = ptrMarkMap.poll();
             ptr1 = checkPtr(ptr1);
             int size1 = markMap.get(ptr1).sizeBlock;
+            // в цикле проверяем указатели освободившихся блоков
             for (int i = 0; i < MAX_FREE_BLOCK; i++) {
                 int ptr2 = ptrMarkMap.poll();
                 ptr2 = checkPtr(ptr2);
@@ -62,61 +62,33 @@ public class HeapWithThread {
     final int MAX_FREE_BLOCK = 50000;                                    // количество указателей для которых создается новый поток во free
     int maxHeapSize;
 
-
-    static long celling = 0;
-    static long compact = 0;
-    static long marBlockTime = 0;
-    static long blockRemove = 0;
-    static long putMarkMap = 0;
-    static long addTime = 0;
-
-
     HeapWithThread(int maxHeapSize) {
-//        bytes = new byte[maxHeapSize];
         this.maxHeapSize = maxHeapSize;
         freeBlock.put(maxHeapSize, new TreeSet<>(Set.of(0)));
     }
 
     public int malloc(int size) {
-        long start = System.currentTimeMillis();
         Integer sizeBlock = freeBlock.ceilingKey(size);             // находим подходящий блок
-        celling+= System.currentTimeMillis()-start;
-
-        start = System.currentTimeMillis();
         if (sizeBlock == null) {
             compact();
             sizeBlock = freeBlock.ceilingKey(size);
             if (sizeBlock == null)
                 throw new OutOfMemoryException(size);
         }
-        compact+=System.currentTimeMillis()-start;
-
-        start = System.currentTimeMillis();
         markBlock = freeBlock.get(sizeBlock).pollFirst();           // получаем его указатель
-        marBlockTime+=System.currentTimeMillis()-start;
-
-        start = System.currentTimeMillis();
         if (freeBlock.get(sizeBlock).isEmpty())                     // если дальше указателей на блок такого размера нет - удаляем
             freeBlock.remove(sizeBlock);
-        blockRemove+=System.currentTimeMillis()-start;
-
-        start = System.currentTimeMillis();
         markMap.put(markBlock, new Mark(size));                     // в указатель записанных
-        putMarkMap+=System.currentTimeMillis()-start;
-
-        start = System.currentTimeMillis();
         if (size != sizeBlock)                                        // если блок больше заданного
             addFreeBlock(sizeBlock-size, markBlock + size); // добавляем остаток в свободные блоки
-        addTime+=System.currentTimeMillis()-start;
-//        setBytes(markBlock, bytes);                              // имитация копирования
         return markBlock;
     }
 
     public void free(int ptr) {
         countFree.incrementAndGet();
         boolean doFree = countFree.compareAndSet(MAX_FREE_BLOCK, 0);
-        ptrMarkMap.add(ptr);
-        if (doFree) {
+        ptrMarkMap.add(ptr);                                             // записываем указатель на свободный блок в очередь
+        if (doFree) {                                                    // делаем свободные блоки лоступными, объединяя соседние
             ExecutorService service = Executors.newSingleThreadExecutor();
             service.submit(new freeRunnable());
             service.shutdown();
@@ -182,7 +154,7 @@ public class HeapWithThread {
         markMap.clear();
         markMap.putAll(markMapTemp);
         freeBlock.clear();
-        addFreeBlock(/*bytes.length-nowMark*/maxHeapSize, nowMark);
+        addFreeBlock(maxHeapSize, nowMark);
     }
 
     public void getBytes(int ptr, byte[] bytes) {
@@ -199,8 +171,9 @@ public class HeapWithThread {
         }
     }
 
+    // проверка - не менялся ли указатель
     int checkPtr (int ptr) {
-        if (codeMark.containsKey(ptr)) {                           // проверка - не менялся ли указатель
+        if (codeMark.containsKey(ptr)) {
             int tempPtr = codeMark.get(ptr).poll();
             if (codeMark.get(ptr).isEmpty())
                 codeMark.remove(ptr);

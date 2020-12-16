@@ -4,6 +4,8 @@ package ru.progwards.java2.lessons.synchro;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class HeapForThreads {
     class Mark {
@@ -29,6 +31,7 @@ public class HeapForThreads {
     ConcurrentSkipListMap<Integer, Mark> markMap = new ConcurrentSkipListMap<>();                    // указатель/размер блока и свободен ли
     HashMap<Integer, LinkedList<Integer>> codeMark = new HashMap<>();    // перекодированные указатели
     TreeMap<Integer, Integer> freeMarks = new TreeMap<>();
+    Lock lock = new ReentrantLock();
 
     HeapForThreads(int maxHeapSize, int threads) {
         ConcurrentSkipListSet<Integer> tempTree;
@@ -55,7 +58,7 @@ public class HeapForThreads {
     public int malloc(int size) {
         Integer markBlock;
         synchronized (this) {
-            Integer sizeBlock = freeBlock.ceilingKey(size);                                                         // находим подходящий блок
+            Integer sizeBlock = freeBlock.ceilingKey(size);                // находим подходящий блок
             if (sizeBlock == null) {
                 compact();
                 sizeBlock = freeBlock.ceilingKey(size);
