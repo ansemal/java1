@@ -55,17 +55,20 @@ public class Philosopher implements Runnable {
         while (Simposion.talkContinue) {     // пока разговор не окончен
             while (!canEat) {     // пока не может - пытается
                 try {
-                    Simposion.semaphore.acquire();    // входит под семафор
-                    // берет правую вилку
-                    right.isFree().compareAndSet(true, false);
-                    // пробует взять левую вилку
-                    canEat = left.isFree().compareAndSet(true, false);
-                    // если получилось взять обе вилки
+                    // входит под семафор максимум одновременно возможных едоков
+                    Simposion.semaphore.acquire();
+                    // пробует взять правую вилку
+                    canEat = right.isFree().compareAndSet(true, false);
                     if (canEat) {
-                        eat();                   // ест
-                        left.isFree().set(true); // освобождает левую
+                        // если получилось - пробует взять левую вилку
+                        canEat = left.isFree().compareAndSet(true, false);
+                        // если получилось взять обе вилки
+                        if (canEat) {
+                            eat();                   // ест
+                            left.isFree().set(true); // освобождает левую
+                        }
+                        right.isFree().set(true);    // освобождает правую в любом случае
                     }
-                    right.isFree().set(true);    // освобождает правую
                     Simposion.semaphore.release();  // выход из-под семафора
                 } catch (InterruptedException e) {
                     e.printStackTrace();

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+// реализация для работы с многопоточностью (задача 3.1)
 public class HeapForThreads {
     class Mark {
         private int sizeBlock;

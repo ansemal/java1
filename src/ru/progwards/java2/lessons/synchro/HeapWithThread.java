@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// использование многопоточности внутри класса (задача 3.2)
 public class HeapWithThread {
     class Mark {
         private int sizeBlock;
@@ -88,7 +89,7 @@ public class HeapWithThread {
         countFree.incrementAndGet();
         boolean doFree = countFree.compareAndSet(MAX_FREE_BLOCK, 0);
         ptrMarkMap.add(ptr);                                             // записываем указатель на свободный блок в очередь
-        if (doFree) {                                                    // делаем свободные блоки лоступными, объединяя соседние
+        if (doFree) {                                                    // делаем свободные блоки доступными, объединяя соседние
             ExecutorService service = Executors.newSingleThreadExecutor();
             service.submit(new freeRunnable());
             service.shutdown();
