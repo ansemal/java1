@@ -9,6 +9,5 @@ public class Client {
 //        filterSpeedGPS.trackToGpsPoint("mayrhoff1.gpx");
         filterSpeedGPS.trackToGpsPoint("NeskuchniyClean.gpx");
 //        filterSpeedGPS.trackToGpsPoint("mayrhoff1.gpx.MA");
-
     }
 }

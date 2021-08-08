@@ -23,11 +23,13 @@ public class SpeedGps implements Speed{
         return c * EARTHRADIUS;
     }
 
+    // вычисление скорости
 //    @Override
 //    public double speed (GPS gpsPoint) {
 //        return (lastGPS!=null) ? distBetween(lastGPS, gpsPoint)/(gpsPoint.time-lastGPS.time): 0;
 //    }
 
+    // вычисление ускорения
     @Override
     public double acceleration (GPS gpsPoint) {
         double speed = (lastGPS!=null) ? distBetween(lastGPS, gpsPoint)/ (gpsPoint.time-lastGPS.time): 0;
