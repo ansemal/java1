@@ -22,7 +22,7 @@ public class ExtSort {
         boolean dir = newDir.mkdir();
         //разбиваем на размер памяти и сортируем
         splitDataAndSort(inFileName);
-        // если нет возможности взять из каждого файла хотя бы по числу на половину памяти
+        // если нет возможности взять из каждого файла хотя бы по числу на половину памяти - объединяем пары
         while (countFile > MEMORY_SIZE)
             tempMerge(newDir);
         // когда файлов достаточно для записи хотя бы одно числа в память из каждого - проводим объединение
@@ -40,7 +40,7 @@ public class ExtSort {
                 // если память заполнена - сортируем и записываем в файл, при обратном - увеличиваем счетчик
                 if (countNum == MEMORY_SIZE-1) {
                     fileTemp = "TempSort" + countFile;
-                    sortAndWrite(fileTemp, countNum, false);
+                    sortAndWrite(fileTemp, countNum);
                 } else
                     countNum++;
             }
@@ -50,13 +50,12 @@ public class ExtSort {
         // сотрируем и записываем в файл остатки, если память заполнена не полностью
         if (countNum !=0) {
             fileTemp = "TempSort" + countFile;
-            sortAndWrite(fileTemp, countNum - 1, false);
+            sortAndWrite(fileTemp, countNum - 1);
         }
     }
 
     //объединение пар файлов, если количество файлов больше размера памяти
     public static void tempMerge (File newDir) {
-        System.out.println("countFile = " + countFile);
         int countNewFile = 0;
         String fileTemp;
         //объединяем пары файлов
@@ -160,13 +159,12 @@ public class ExtSort {
             }
         }
         mergeList.clear();
-
     }
 
     // быстрая сортировка и запись в файл
-    public static void sortAndWrite (String fileName, int endIndex, boolean append) {
+    public static void sortAndWrite (String fileName, int endIndex) {
         QuickSort.sortHoare(memory, 0, endIndex);
-        try (FileWriter writer = new FileWriter(/*System.getProperty("user.dir") + */ROOT + "/Sort/" + fileName + ".txt", append)) {
+        try (FileWriter writer = new FileWriter(ROOT + "/Sort/" + fileName + ".txt", false)) {
             for (int i = 0; i <= endIndex; i++) {
                 writer.write(memory[i] + "\n");   //  спросить почему без перевода абракадабра
                 memory[i] = null;
